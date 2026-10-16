@@ -98,7 +98,27 @@ button.ghost{
 }
 .group{background:var(--surface); border:1px solid var(--line); border-radius:12px; margin:0 0 14px; overflow:hidden;}
 .group h3{margin:0; padding:9px 14px; background:var(--accent-soft); color:var(--ink); font-size:.95rem;}
-.item{display:flex; align-items:flex-start; gap:12px; padding:10px 14px; border-top:1px solid var(--line); cursor:pointer;}
+.item{display:flex; align-items:center; gap:8px; padding:6px 10px 6px 14px; border-top:1px solid var(--line);}
+.itemlab{display:flex; align-items:flex-start; gap:12px; flex:1 1 auto; min-width:0; padding:4px 0; cursor:pointer;}
+button.mini{
+  flex:0 0 auto; font:inherit; font-size:.8rem; font-weight:600; padding:5px 10px; border-radius:999px; cursor:pointer;
+  border:1px solid var(--line); background:var(--bg); color:var(--muted);
+}
+.addrow{display:flex; gap:8px; margin:12px 0 8px;}
+.addrow input{
+  flex:1 1 auto; min-width:0; font:inherit; padding:9px 12px; border-radius:8px;
+  border:1px solid var(--line); background:var(--surface); color:var(--ink);
+}
+button.primary{
+  flex:0 0 auto; font:inherit; font-weight:600; padding:8px 16px; border-radius:8px; cursor:pointer;
+  border:1px solid var(--accent); background:var(--accent); color:var(--accent-ink);
+}
+.sharerow{display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; margin:0 0 14px;}
+.status{color:var(--muted); font-size:.9rem;}
+details.haves{background:var(--surface); border:1px solid var(--line); border-radius:12px; margin:0 0 14px; overflow:hidden;}
+details.haves summary{padding:10px 14px; cursor:pointer; font-weight:600; color:var(--muted);}
+.haverow{display:flex; align-items:center; justify-content:space-between; gap:8px; padding:6px 10px 6px 14px; border-top:1px solid var(--line); color:var(--muted);}
+textarea.sharetext{width:100%; min-height:160px; font:inherit; font-size:.9rem; padding:10px; border-radius:8px; border:1px solid var(--line); background:var(--surface); color:var(--ink);}
 .group h3 + .item{border-top:0;}
 .item input{width:22px; height:22px; margin:1px 0 0; flex:0 0 auto; accent-color:var(--accent);}
 .item .nm{flex:1 1 auto; min-width:0;}
@@ -150,22 +170,22 @@ var MENU = [
     ['Mon','Slow cooker butter chicken (p. 34)','Boneless chicken leg 1 kg. Switch on in the morning','Sun night','','Slow cooker'],
     ['Tue','Cobb salad (p. 2)','Chicken breast 700 g, bacon 250 g','Mon night','','Salad'],
     ['Wed','Protein with greens: sheet pan salmon (p. 14)','Salmon 1.2 kg with broccoli and carrots','Tue night',''],
-    ['Thu','Tortellini with pesto and peas (p. 23)','Bacon 100 g in place of the prosciutto','Wed night',''],
-    ['Fri','Beef tacos (Beef/Chicken Tacos, p. 9)','Minced beef 700 g. Also move the kimchi stew pork to the fridge tonight','Thu night','','Taco'],
+    ['Thu','Tortellini with pesto and peas (p. 23)','Bacon in place of the prosciutto, if any is left','Wed night',''],
+    ['Fri','Beef tacos (Beef/Chicken Tacos, p. 9)','Minced beef 700 g','Thu night','','Taco'],
     ['Sat','Leftovers or eat out','','','']
   ],
   [
-    ['Sun','Kimchi jjigae (p. 36)','Pork shoulder 350 g, sliced thin','Week 2, Fri night',''],
-    ['Mon','Chopped Italian salad (p. 6)','Salami from the shop. No freezer meat','\u2014',''],
-    ['Tue','Chicken quesadillas (p. 12)','Chicken breast 500 g','Mon night',''],
+    ['Sun','No dinner','','','','Off'],
+    ['Mon','No dinner','','','','Off'],
+    ['Tue','Chicken quesadillas (p. 12)','Chicken breast 500 g','Mon night (or thaw in cold water on Tuesday afternoon)',''],
     ['Wed','Burger bowls (p. 16)','Minced beef 700 g','Tue night',''],
-    ['Thu','Chicken pesto pasta (p. 22)','Chicken breast 450 g. Also move the adobo pork to the fridge tonight. Cook rice tonight for tomorrow','Wed night',''],
-    ['Fri','Kimchi fried rice (p. 29)','Bacon 150 g in place of the frankfurters. Uses Thursday\u2019s cold rice','Thu night',''],
-    ['Sat','Leftovers or eat out. Marinate the pork for tomorrow\u2019s adobo tonight','','','']
+    ['Thu','Breakfast for dinner: pancakes and smoothies','No meat. Also move the carnitas pork to the fridge tonight','\u2014','','Breakfast'],
+    ['Fri','Chicken pesto pasta (p. 22)','Chicken breast 450 g','Thu night','','Pasta'],
+    ['Sat','Leftovers or eat out. Rub the carnitas pork with its spices tonight and keep it in the fridge','','','']
   ],
   [
-    ['Sun','Slow cooker pork adobo with broccoli (Chicken Adobo, p. 30)','Pork shoulder 1.55 kg in place of the chicken. Switch on by 10 am','Week 3, Thu night',''],
-    ['Mon','Simple salad (p. 4)','Add leftover adobo pork for protein','\u2014',''],
+    ['Sun','Slow cooker carnitas','Pork shoulder 1.55 kg. Switch on by 10 am. Serve in tortillas with slaw, pickled red onions and lime','Week 3, Thu night',''],
+    ['Mon','Simple salad (p. 4)','Add leftover carnitas for protein','\u2014',''],
     ['Tue','Green chicken enchiladas (p. 11)','Chicken breast 350 g','Mon night',''],
     ['Wed','Lemon chicken and spinach with orzo (p. 19)','Chicken breast 900 g','Tue night',''],
     ['Thu','Pasta with sausage and broccolini (p. 24)','Pork sausage 550 g from the local shop (not on the meat order)','\u2014',''],
@@ -178,11 +198,11 @@ var FREEZER = [
   ['RF Thailand chicken breast','3 packs','Wk 2 Cobb 700 g; Wk 3 quesadillas 500 g and pesto pasta 450 g; Wk 4 enchiladas 350 g and lemon chicken 900 g'],
   ['RF Thailand chicken leg, boneless','3 packs','Wk 1 Greek chicken 900 g and chicken with peas 900 g; Wk 2 butter chicken 1 kg'],
   ['Norway salmon fillet','4.90 lb (2.2 kg)','Wk 1 sushi bowls 1 kg; Wk 2 sheet pan salmon 1.2 kg'],
-  ['Brazil minced pork','2.19 lb (1 kg)','Wk 4 larb bowls 500 g (500 g spare since the Week 2 stir fry was dropped)'],
+  ['Brazil minced pork','2.19 lb (1 kg)','Wk 4 larb bowls 500 g (about 500 g spare)'],
   ['Brazil minced beef','3.13 lb (1.4 kg)','Wk 2 beef tacos 700 g; Wk 3 burger bowls 700 g'],
-  ['Spanish pork shoulder','4.25 lb (1.9 kg)','Wk 3 kimchi jjigae 350 g; Wk 4 pork adobo 1.55 kg'],
+  ['Spanish pork shoulder','4.25 lb (1.9 kg)','Wk 4 carnitas 1.55 kg (350 g spare)'],
   ['Thailand shell-less prawns','1 pack','Wk 1 shrimp tacos'],
-  ['Smoked bacon','1.19 lb (540 g)','Wk 2 Cobb 250 g and tortellini 100 g; Wk 3 kimchi fried rice 150 g']
+  ['Smoked bacon','1.19 lb (540 g)','Wk 2 Cobb salad (all of it)']
 ];
 
 var SHOP = [
@@ -252,29 +272,30 @@ var SHOP = [
   { /* WEEK 3 */
     'Produce':[
       ['Yellow onions','3'],['Red onions','2'],['Garlic','2 heads'],['Fresh ginger','1 small knob'],
-      ['Spring onions','2 bunches'],['Romaine lettuce','3 heads'],['Radicchio (optional)','1 small'],
-      ['Cherry tomatoes','2 punnets'],['Tomatoes, medium','3'],['Bell pepper','1'],['Cucumber','1'],
-      ['Fresh basil','1 large pack'],['Lemon','1'],['Cilantro','1 bunch'],['Mushrooms','200 g'],
+      ['Spring onions','1 bunch'],['Romaine lettuce','2 heads'],
+      ['Cherry tomatoes','1 punnet'],['Tomatoes, medium','3'],['Bell pepper','1'],['Cucumber','1'],
+      ['Lemon','1'],['Cilantro','1 bunch'],['Mushrooms','200 g'],
       ['Avocado (quesadilla sauce, optional)','1'],['Frozen corn','250 g'],['Frozen fries','1 kg']
     ],
-    'Dairy, eggs and tofu':[
-      ['Mini mozzarella balls','250 g'],['Parmesan','125 g'],['Shredded Monterey Jack or cheddar','400 g'],
-      ['Heavy or whipping cream','250 ml'],['Eggs (kimchi fried rice)','9'],['Firm tofu','2 blocks (about 500 g)']
+    'Dairy and eggs':[
+      ['Shredded Monterey Jack or cheddar','400 g'],['Parmesan (pesto pasta)','125 g'],['Heavy or whipping cream (pesto pasta)','250 ml']
     ],
     'Bread, pasta, tortillas':[
       ['Small flour tortillas','12'],['Penne','500 g']
     ],
     'Canned and jars':[
-      ['Kimchi (keep the juice for the stew)','1 large jar (about 800 g)'],['Gochujang','1 small tub'],
-      ['Salami','150 g'],['Pepperoncini','1 small jar'],['Black olives','1 small can'],
-      ['Dill pickles','1 jar'],['Basil pesto','1 jar']
+      ['Basil pesto','1 jar'],['Dill pickles','1 jar']
+    ],
+    'Breakfast for dinner (Thursday)':[
+      ['Maple syrup','1 bottle'],['Bananas (pancakes and smoothies)','1 extra bunch'],
+      ['Frozen mixed berries (smoothies)','500 g extra'],['Yogurt (smoothies)','500 g extra']
     ]
   },
   { /* WEEK 4 */
     'Produce':[
-      ['Broccoli','3 heads'],['Garlic','3 heads'],['Green leaf lettuce','1 large head'],
+      ['Broccoli','1 head'],['Garlic','3 heads'],['Yellow onions (carnitas)','2'],['Oranges (carnitas)','2'],['Small green cabbage (carnitas slaw)','\u00bd'],['Green leaf lettuce','1 large head'],
       ['Cucumbers','4'],['Grape tomatoes','1 punnet'],['Red onions','2'],['Avocado','1'],['Bell pepper','1'],
-      ['Lemons','6'],['Limes','2'],['Cilantro','2 bunches'],['Baby spinach','200 g'],
+      ['Lemons','6'],['Limes','5'],['Cilantro','2 bunches'],['Baby spinach','200 g'],
       ['Broccolini','2 bunches (about 300 g)'],['Kale or spinach (larb bowls)','180 g'],
       ['Spring onions','1 bunch'],['Fresh mint','1 bunch'],['Fresh basil','1 pack']
     ],
@@ -282,7 +303,7 @@ var SHOP = [
       ['Sour cream','1 tub (about 200 g)'],['Shredded cheddar or Monterey Jack','170 g'],['Parmesan','200 g']
     ],
     'Bread, pasta, tortillas':[
-      ['Croutons','1 bag'],['Flour tortillas, 8 inch','9'],['Orzo','500 g'],['Orecchiette','500 g']
+      ['Croutons','1 bag'],['Flour tortillas, 8 inch','9'],['Small flour tortillas (carnitas)','16'],['Orzo','500 g'],['Orecchiette','500 g']
     ],
     'Meat, canned and jars':[
       ['Pork sausage (not on the meat order)','550 g'],['Green chile enchilada sauce or salsa verde','2 jars (about 750 g)'],
@@ -316,7 +337,7 @@ var BASICS = {
 };
 
 var PANTRY = {
-  'Oils and vinegars':['Olive oil','Neutral cooking oil','Rice vinegar','Red wine vinegar','White vinegar (adobo)','Apple cider vinegar (pickled onions)','Champagne or white wine vinegar (Greek chicken)'],
+  'Oils and vinegars':['Olive oil','Neutral cooking oil','Rice vinegar','Red wine vinegar','White vinegar','Apple cider vinegar (pickled onions)','Champagne or white wine vinegar (Greek chicken)'],
   'Sauces and pastes':['Soy sauce and dark soy sauce','Fish sauce','Sesame oil','Dijon and yellow mustard','Mayonnaise','Ketchup','Worcestershire sauce','Sriracha'],
   'Spices':['Cumin','Ground coriander','Chili powder','Paprika and smoked paprika','Dried oregano','Italian seasoning','Garam masala (butter chicken)','Cinnamon sticks','Chili flakes','Cayenne pepper','Ground nutmeg','Bay leaves','Black peppercorns','Garlic powder and onion powder','Salt'],
   'Dry goods':['Bread flour, 1 kg, and instant yeast (Week 1 pizza dough, mixed the Saturday before)','Jasmine rice, 5 kg','Short-grain or sushi rice, 1 kg (Week 1 sushi bowls)','Plain flour','Cornflour','Sugar and brown sugar','Honey','Sesame seeds','Chicken stock cubes'],
@@ -328,6 +349,11 @@ var KEY = 'dinner-plan-ticks-v1';
 var ticks = {};
 try { ticks = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch(e){ ticks = {}; }
 function saveTicks(){ try { localStorage.setItem(KEY, JSON.stringify(ticks)); } catch(e){} }
+/* Items already at home, and extra items added during the week. Saved on this device only. */
+var HAVE_KEY = 'dinner-plan-have-v1', EXTRA_KEY = 'dinner-plan-extra-v1';
+function load(k){ try { return JSON.parse(localStorage.getItem(k) || '{}') || {}; } catch(e){ return {}; } }
+function store(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+var haves = load(HAVE_KEY), extras = load(EXTRA_KEY);
 
 /* ---------- HELPERS ---------- */
 function el(tag, attrs, kids){
@@ -342,7 +368,7 @@ function el(tag, attrs, kids){
 }
 
 var uid = 0;
-function checkItem(key, name, qty){
+function checkItem(key, name, qty, action){
   var cb = el('input', {type:'checkbox', id:'cb-' + (uid++)});
   cb.checked = !!ticks[key];
   cb.addEventListener('change', function(){
@@ -350,7 +376,13 @@ function checkItem(key, name, qty){
     saveTicks(); updateProgress();
   });
   cb.dataset.key = key;
-  return el('label', {class:'item'}, [cb, el('span', {class:'nm', text:name}), qty ? el('span', {class:'q', text:qty}) : null]);
+  var lab = el('label', {class:'itemlab'}, [cb, el('span', {class:'nm', text:name}), qty ? el('span', {class:'q', text:qty}) : null]);
+  var btn = null;
+  if (action){
+    btn = el('button', {class:'mini', type:'button', text:action.label, 'aria-label':action.label + ': ' + name});
+    btn.addEventListener('click', action.fn);
+  }
+  return el('div', {class:'item'}, [lab, btn]);
 }
 
 function checklist(prefix, groups, withQty){
@@ -394,7 +426,7 @@ function menuPanel(){
       var body = el('div', null, [dishEl]);
       if (n[2]) body.appendChild(el('div', {class:'meta', text:n[2]}));
       if (n[3] && n[3] !== '—') body.appendChild(el('div', {class:'meta', text:'Move to fridge: ' + n[3]}));
-      w.appendChild(el('div', {class:'night' + (n[0] === 'Sat' ? ' flex' : '')}, [chip, body]));
+      w.appendChild(el('div', {class:'night' + (n[0] === 'Sat' || n[1] === 'No dinner' ? ' flex' : '')}, [chip, body]));
     });
     p.appendChild(w);
   });
@@ -418,11 +450,11 @@ function freezerPanel(){
   var ul = el('ul');
   [
     'All meat is one trip. The weekly shop is produce, dairy and pantry only.',
-    'Almost everything on the meat order is used; 500 g of minced pork is spare after the Week 2 change. The Week 2 BBQ sausages and burgers and Week 4’s pork sausage come from the local shop.',
+    'Some meat is spare after the Week 2 and 3 changes: about 500 g minced pork and 350 g pork shoulder. Keep it frozen for next month. The Week 2 BBQ sausages and burgers and Week 4’s pork sausage come from the local shop.',
     'Cilantro, limes, avocados, cabbage and tortillas repeat across nights in the same week, so nothing is bought for a single dish.',
     'Tortillas freeze well. Buy the 16 or 20 pack and freeze what is left after taco night.',
     'Spring onions, herbs, ginger, green beans and broccoli are usually cheaper at a wet market than a supermarket.',
-    'Cook extra rice with Week 2 Monday’s butter chicken for the boys’ Thursday rice lunch, and cook rice on Week 3 Thursday night for Friday’s kimchi fried rice. Cold rice is what makes fried rice work.',
+    'Cook extra rice with Week 2 Monday’s butter chicken for the boys’ Thursday rice lunch. Cold rice also makes the best fried rice.',
     'Frozen berries cost much less than fresh. Use them in the overnight oats jars (they thaw overnight) and buy fresh berries only for the boys.',
     'Compare the price per 100 g on pasta, rice, canned beans and cheese. Store brands often cost the least.'
   ].forEach(function(t){ ul.appendChild(el('li', {text:t})); });
@@ -432,25 +464,149 @@ function freezerPanel(){
 
 function weekPanel(i){
   var p = el('section', {class:'panel', id:'p-w' + i, role:'tabpanel'});
+  renderWeek(i, p);
+  return p;
+}
+
+function weekItems(i){
+  /* Every listed item for week i that is still needed: [group, key, name, qty] */
+  var out = [];
+  (extras['w' + i] || []).forEach(function(x){ out.push(['Added this week', 'w' + i + '|x|' + x.id, x.name, '']); });
+  [['d', SHOP[i]], ['b', BASICS]].forEach(function(pair){
+    Object.keys(pair[1]).forEach(function(g){
+      pair[1][g].forEach(function(it){
+        var key = 'w' + i + '|' + pair[0] + '|' + g + '|' + it[0];
+        if (!haves[key]) out.push([g, key, it[0], it[1]]);
+      });
+    });
+  });
+  return out;
+}
+
+function renderWeek(i, p){
+  p = p || document.getElementById('p-w' + i);
+  p.textContent = '';
+  var pre = 'w' + i + '|';
   p.appendChild(el('div', {class:'listhead'}, [
     el('h2', {text:'Week ' + (i+1) + ' shopping list', style:'margin:0'}),
     el('span', {class:'progress', id:'prog-' + i})
   ]));
-  p.appendChild(el('p', {class:'sub', text:'Dinner ingredients first, then breakfast, fruit, lunchbox and snack items. Meat is not listed because it comes from the freezer.'}));
-  p.appendChild(el('h3', {text:'Dinners'}));
-  p.appendChild(checklist('w' + i + '|d', SHOP[i], true));
-  p.appendChild(el('h3', {text:'Breakfast, fruit, lunchboxes and snacks'}));
-  p.appendChild(checklist('w' + i + '|b', BASICS, true));
-  var clear = el('button', {class:'ghost', type:'button', text:'Clear ticks for this week'});
-  clear.addEventListener('click', function(){
-    Object.keys(ticks).forEach(function(k){ if (k.indexOf('w' + i + '|') === 0) delete ticks[k]; });
-    saveTicks();
-    p.querySelectorAll('input[type=checkbox]').forEach(function(c){ c.checked = false; });
-    updateProgress();
+  p.appendChild(el('p', {class:'sub', text:'Tap “Have it” for anything already at home, and add extras from the whiteboard. Changes are saved on this phone, so share the list when someone else is shopping.'}));
+
+  /* Add an item */
+  var input = el('input', {type:'text', id:'add-w' + i, placeholder:'Add an item, e.g. butter', 'aria-label':'Add an item to Week ' + (i+1), autocomplete:'off', enterkeyhint:'done'});
+  var form = el('form', {class:'addrow'}, [input, el('button', {class:'primary', type:'submit', text:'Add'})]);
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var name = input.value.trim();
+    if (!name) return;
+    (extras['w' + i] = extras['w' + i] || []).push({id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), name: name});
+    store(EXTRA_KEY, extras);
+    renderWeek(i);
+    var again = document.getElementById('add-w' + i); if (again) again.focus();
   });
-  p.appendChild(el('div', {class:'tools'}, [clear]));
-  p.appendChild(el('p', {class:'fine', text:'Amounts are rounded for about six adult portions per dinner. Check them against each recipe, and skip anything already in the pantry.'}));
-  return p;
+  p.appendChild(form);
+
+  /* Share what is still needed */
+  var status = el('span', {class:'status', role:'status'});
+  var share = el('button', {class:'ghost', type:'button', text:'Share list'});
+  var shareBox = el('div');
+  share.addEventListener('click', function(){ shareWeek(i, status, shareBox); });
+  p.appendChild(el('div', {class:'sharerow'}, [share, status]));
+  p.appendChild(shareBox);
+
+  /* Added this week */
+  var added = extras['w' + i] || [];
+  if (added.length){
+    var box = el('div', {class:'group'}, [el('h3', {text:'Added this week'})]);
+    added.forEach(function(x){
+      box.appendChild(checkItem(pre + 'x|' + x.id, x.name, '', {label:'Remove', fn:function(){
+        extras['w' + i] = (extras['w' + i] || []).filter(function(y){ return y.id !== x.id; });
+        delete ticks[pre + 'x|' + x.id];
+        store(EXTRA_KEY, extras); saveTicks(); renderWeek(i);
+      }}));
+    });
+    p.appendChild(box);
+  }
+
+  /* The planned list, minus anything already at home */
+  var haveList = [];
+  function groups(code, data, title){
+    p.appendChild(el('h3', {text:title}));
+    Object.keys(data).forEach(function(g){
+      var box = el('div', {class:'group'}, [el('h3', {text:g})]);
+      var shown = 0;
+      data[g].forEach(function(it){
+        var key = pre + code + '|' + g + '|' + it[0];
+        if (haves[key]){ haveList.push([key, it[0]]); return; }
+        shown++;
+        box.appendChild(checkItem(key, it[0], it[1], {label:'Have it', fn:function(){
+          haves[key] = 1; delete ticks[key];
+          store(HAVE_KEY, haves); saveTicks(); renderWeek(i);
+        }}));
+      });
+      if (shown) p.appendChild(box);
+    });
+  }
+  groups('d', SHOP[i], 'Dinners');
+  groups('b', BASICS, 'Breakfast, fruit, lunchboxes and snacks');
+
+  if (haveList.length){
+    var det = el('details', {class:'haves'}, [el('summary', {text:'Already have (' + haveList.length + ')'})]);
+    haveList.forEach(function(h){
+      var undo = el('button', {class:'mini', type:'button', text:'Need it', 'aria-label':'Need it: ' + h[1]});
+      undo.addEventListener('click', function(){ delete haves[h[0]]; store(HAVE_KEY, haves); renderWeek(i); });
+      det.appendChild(el('div', {class:'haverow'}, [el('span', {text:h[1]}), undo]));
+    });
+    p.appendChild(det);
+  }
+
+  /* Reset, with a second tap to confirm */
+  var reset = el('button', {class:'ghost', type:'button', text:'Reset this week'});
+  var armed = null;
+  reset.addEventListener('click', function(){
+    if (!armed){
+      reset.textContent = 'Tap again to clear ticks, “have it” items and added items';
+      armed = setTimeout(function(){ armed = null; reset.textContent = 'Reset this week'; }, 4000);
+      return;
+    }
+    clearTimeout(armed); armed = null;
+    Object.keys(ticks).forEach(function(k){ if (k.indexOf(pre) === 0) delete ticks[k]; });
+    Object.keys(haves).forEach(function(k){ if (k.indexOf(pre) === 0) delete haves[k]; });
+    extras['w' + i] = [];
+    saveTicks(); store(HAVE_KEY, haves); store(EXTRA_KEY, extras);
+    renderWeek(i);
+  });
+  p.appendChild(el('div', {class:'tools'}, [reset]));
+  p.appendChild(el('p', {class:'fine', text:'Amounts are rounded for about six adult portions per dinner. Meat is not listed because it comes from the freezer.'}));
+  if (document.getElementById('prog-0')) updateProgress();
+}
+
+function shareWeek(i, status, box){
+  var items = weekItems(i).filter(function(r){ return !ticks[r[1]]; });
+  var lines = ['Week ' + (i+1) + ' shopping list'], last = null;
+  items.forEach(function(r){
+    if (r[0] !== last){ lines.push('', r[0]); last = r[0]; }
+    lines.push('- ' + r[2] + (r[3] ? ' (' + r[3] + ')' : ''));
+  });
+  var text = lines.join('\n');
+  box.textContent = '';
+  function showText(){
+    var ta = el('textarea', {class:'sharetext', readonly:'', 'aria-label':'Shopping list text'});
+    ta.value = text; box.appendChild(ta); ta.focus(); ta.select();
+    status.textContent = 'Select the text and copy it into a message.';
+  }
+  function copy(){
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){ status.textContent = 'Copied. Paste it into a message.'; }, showText);
+    } else showText();
+  }
+  var framed = false; try { framed = window.self !== window.top; } catch(e){ framed = true; }
+  if (!framed && navigator.share){
+    navigator.share({title:'Week ' + (i+1) + ' shopping list', text:text}).then(function(){ status.textContent = ''; }, function(err){
+      if (!err || err.name !== 'AbortError') copy();
+    });
+  } else copy();
 }
 
 function pantryPanel(){
@@ -470,7 +626,7 @@ function pantryPanel(){
 
 function updateProgress(){
   for (var i = 0; i < 4; i++){
-    var all = document.getElementById('p-w' + i).querySelectorAll('input[type=checkbox]');
+    var all = document.getElementById('p-w' + i).querySelectorAll('.group input[type=checkbox]');
     var done = 0; all.forEach(function(c){ if (c.checked) done++; });
     document.getElementById('prog-' + i).textContent = done + ' of ' + all.length + ' ticked';
   }
