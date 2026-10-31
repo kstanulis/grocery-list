@@ -1,10 +1,8 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="apple-mobile-web-app-title" content="Dinner Plan">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8D%B2%3C/text%3E%3C/svg%3E">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>4-Week Dinner Plan</title>
 <style>
 :root{
@@ -68,6 +66,7 @@ h3{font-size:1rem; margin:20px 0 6px; color:var(--muted); font-weight:700;}
 /* menu */
 .week{background:var(--surface); border:1px solid var(--line); border-radius:12px; margin:0 0 18px; overflow:hidden;}
 .week h2{margin:0; padding:12px 14px; border-bottom:1px solid var(--line); font-size:1.1rem;}
+.week h2 span{font-weight:500; color:var(--muted); font-size:.92rem;}
 .night{display:grid; grid-template-columns:76px 1fr; gap:4px 12px; padding:11px 14px; border-top:1px solid var(--line);}
 .night > div{min-width:0;}
 .night:first-of-type{border-top:0;}
@@ -80,10 +79,11 @@ h3{font-size:1rem; margin:20px 0 6px; color:var(--muted); font-weight:700;}
 .dish{font-weight:700;}
 a.dish{color:var(--ink); text-decoration:underline; text-decoration-color:var(--accent); text-underline-offset:3px;}
 .meta{color:var(--muted); font-size:.9rem;}
+.meta b{color:var(--ink); font-weight:600;}
 .flex .dish{font-weight:600; color:var(--muted);}
 
 /* tables */
-.tablewrap{overflow-x:auto; background:var(--surface); border:1px solid var(--line); border-radius:12px;}
+.tablewrap{overflow-x:auto; background:var(--surface); border:1px solid var(--line); border-radius:12px; margin:0 0 8px;}
 table{border-collapse:collapse; width:100%; min-width:520px;}
 th,td{text-align:left; padding:10px 12px; border-top:1px solid var(--line); vertical-align:top; font-size:.95rem;}
 thead th{border-top:0; color:var(--muted); font-size:.85rem; font-weight:700;}
@@ -133,13 +133,19 @@ textarea.sharetext{width:100%; min-height:160px; font:inherit; font-size:.9rem; 
   .night{grid-template-columns:62px 1fr;}
   h1{font-size:1.4rem;}
 }
-[hidden]{display:none !important;}
+@media print{
+  nav.tabs,.addrow,.sharerow,.tools,button.mini,details.haves{display:none!important;}
+  body{background:#fff; color:#000; font-size:12px;}
+  .item{padding:2px 8px;} .group{margin:0 0 6px; break-inside:avoid;} .group h3{padding:4px 8px;}
+  header.top{padding:0 0 4px;} main{padding:0;}
+}
 </style>
 </head>
 <body>
+
 <header class="top">
-  <h1>4-week dinner plan and grocery lists</h1>
-  <p class="sub">Meat comes from one monthly frozen order. Everything else is one local shop per week. Amounts cover 3 adults and 2 children at dinner, plus next-day leftovers for two adult lunches. Tap a tab to switch sections; ticks on the shopping lists are saved on your device.</p>
+  <h1>November dinner plan and grocery lists</h1>
+  <p class="sub">Sunday 1 to Saturday 28 November. Week 1 runs on what is already in the freezer, so the Chung Wan meat run can wait until Saturday 7 November. Amounts cover 3 adults and 2 children at dinner, plus next-day leftovers for two adult lunches. Ticks on the shopping lists are saved on your device.</p>
 </header>
 
 <nav class="tabs" aria-label="Sections">
@@ -150,193 +156,244 @@ textarea.sharetext{width:100%; min-height:160px; font:inherit; font-size:.9rem; 
 
 <script>
 /* ---------- DATA ---------- */
+var MONTH = 'Nov';
+var START = 1; /* Sunday 1 November 2026 */
+var DAY_ORDER = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 var DAYS = {
   Mon:{h:140, theme:'Salad'}, Tue:{h:25, theme:'Taco/Wrap'}, Wed:{h:90, theme:'Simple'},
   Thu:{h:5, theme:'Pasta/Pizza'}, Fri:{h:210, theme:'Rice'}, Sat:{h:0, theme:'Flex'}, Sun:{h:275, theme:'Easy'}
 };
+function dateOf(week, day){ return START + week * 7 + DAY_ORDER.indexOf(day); }
 
+/* d: day, dish, link ('p25' = menu book page), tag (chip label override),
+   note: what to use, thaw: move to fridge, boys: kid adjustment, lunch: next-day lunch */
 var MENU = [
-  [
-    ['Sun','Sheet pan pizza (menu book p. 25)','Two cans of tomatoes, charcuterie and mozzarella. Dough mixed the Saturday before','\u2014','p25'],
-    ['Mon','Greek chicken (Greek Salad, p. 3)','Boneless chicken leg 900 g','Sun night','p3'],
-    ['Tue','Shrimp tacos (p. 8)','Prawns, 1 pack','Mon night','p8'],
-    ['Wed','Crispy chicken thighs with peas (p. 15)','Boneless chicken leg 900 g (the recipe uses bone-in, so it cooks faster)','Tue night','p15'],
-    ['Thu','Penne alla vodka (p. 21)','No meat. Make extra for Friday\u2019s pasta lunch','\u2014','p21'],
-    ['Fri','Salmon sushi bowls (p. 28)','Salmon 1 kg','Thu night','p28'],
-    ['Sat','Leftovers or eat out. Pick up the BBQ sausages and burgers for tomorrow (on the Week 2 list)','','','']
+  [ /* WEEK 1: freezer stock first */
+    {d:'Sun', dish:'Sheet pan pizza', link:'p25', tag:'Sheet pan',
+     note:'Pizza sauce and mozzarella from the freezer. Salami from the shop. Mix the dough by 1 pm (it needs about 3 hours to rise). Make both trays.',
+     thaw:'Pizza sauce and mozzarella, tonight (Sat 31 Oct)', boys:'Plain cheese corner, no chili flakes.', lunch:'Second tray covers Monday lunch'},
+    {d:'Mon', dish:'Chopped Italian salad', link:'p6',
+     note:'Same salami pack as the pizza, mozzarella from the freezer. Leave out the radicchio.',
+     thaw:'Mozzarella, Sun night', boys:'Plate of salami, mozzarella cubes, cucumber, tomatoes and bread. Dressing on the side.', lunch:'Keep the dressing separate for Tuesday lunch'},
+    {d:'Tue', dish:'Sheet pan chicken gyros', link:'p10',
+     note:'All of the 1 kg chicken thighs from the freezer. Serve in warm tortillas with the yogurt sauce and salad.',
+     thaw:'Chicken thighs (1 kg), Mon night', boys:'Chicken and plain yogurt in a tortilla, cucumber on the side.', lunch:'Wednesday lunch'},
+    {d:'Wed', dish:'Protein with greens: soy-honey salmon', link:'p14',
+     note:'Salmon from the freezer with broccoli and carrots. Soy, honey and olive oil. Serve with rice.',
+     thaw:'Salmon, Tue night', boys:'Salmon flaked over rice with broccoli.', lunch:'Thursday lunch'},
+    {d:'Thu', dish:'Cheesy eggplant bake', link:'p20',
+     note:'Uses about 450 g of the freezer mozzarella. Makes 8 servings, so Friday lunches are covered.',
+     thaw:'Mozzarella, Wed night', boys:'Cut the eggplant small. If they refuse it, set aside plain rigatoni with sauce and cheese before mixing.', lunch:'Friday lunch, adults and boys'},
+    {d:'Fri', dish:'Pork stir fry and green beans', link:'p27',
+     note:'All of the ground pork from the freezer (about 900 g), so make double the recipe. Serve with rice.',
+     thaw:'Ground pork, Thu night', boys:'Take their portion out before adding the chilli garlic sauce.', lunch:'Saturday lunch'},
+    {d:'Sat', dish:'Leftovers or eat out', note:'Chung Wan meat run today. Portion and label the bags, then move the chicken breast for Sunday to the fridge.'}
   ],
-  [
-    ['Sun','BBQ: sausages and burgers','Sausages and burger patties from the shop (not on the meat order). Also move the butter chicken meat to the fridge tonight, and slice the onions and potatoes for it','\u2014','','BBQ'],
-    ['Mon','Slow cooker butter chicken (p. 34)','Boneless chicken leg 1 kg. Switch on in the morning','Sun night','p34','Slow cooker'],
-    ['Tue','Cobb salad (p. 2)','Chicken breast 700 g, bacon 250 g','Mon night','p2','Salad'],
-    ['Wed','Protein with greens: sheet pan salmon (p. 14)','Salmon 1.2 kg with broccoli and carrots','Tue night','p14'],
-    ['Thu','Tortellini with pesto and peas (p. 23)','Bacon in place of the prosciutto, if any is left','Wed night','p23'],
-    ['Fri','Beef tacos (Beef/Chicken Tacos, p. 9)','Minced beef 700 g','Thu night','p9','Taco'],
-    ['Sat','Leftovers or eat out','','','']
+  [ /* WEEK 2 */
+    {d:'Sun', dish:'Slow cooker white bean chicken chili', link:'p33', tag:'Slow cooker',
+     note:'Chicken breast 700 g. Put everything except the sour cream and cream in the slow cooker on low for 6 hours, then stir those in. Cream from the freezer.',
+     thaw:'Chicken breast and cream, Sat night', boys:'Skip the cayenne and use half the green chilies. Top with cheese and tortilla chips.', lunch:'Monday lunch'},
+    {d:'Mon', dish:'Mexican chopped salad', link:'p7',
+     note:'Chicken breast 700 g. Shares the cilantro, limes, avocado and tortilla chips with Sunday.',
+     thaw:'Chicken breast, Sun night (marinate it then)', boys:'Chicken, corn, cheese and tortilla chips. Dressing on the side.', lunch:'Tuesday lunch'},
+    {d:'Tue', dish:'Beef quesadillas', link:'p12',
+     note:'Beef filling with minced beef 750 g, plus corn and cilantro. Serve with sour cream and salsa.',
+     thaw:'Minced beef, Mon night', boys:'Leave out the cayenne in the spice mix.', lunch:'Wednesday lunch'},
+    {d:'Wed', dish:'Ham and cheese sliders', link:'p17',
+     note:'Two trays of 12. Ham and Swiss cheese from the shop. Serve with peas and carrots from the freezer.',
+     thaw:'', boys:'Kids love these as they are.', lunch:'Thursday lunch (extra sliders)'},
+    {d:'Thu', dish:'Pasta with sausage and broccolini', link:'p24',
+     note:'Italian pork sausages from the shop, casings removed.',
+     thaw:'', boys:'Skip the chili flakes on their portion.', lunch:'Friday lunch, adults and boys'},
+    {d:'Fri', dish:'Chicken adobo with broccoli', link:'p30',
+     note:'Boneless chicken leg 1.5 kg. Marinate for 1 to 3 hours before cooking. Serve with rice.',
+     thaw:'Chicken leg (1.5 kg), Thu night', boys:'Mild as it is. Spoon extra sauce over their rice.', lunch:'Saturday lunch'},
+    {d:'Sat', dish:'Leftovers or eat out', note:''}
   ],
-  [
-    ['Sun','No dinner','','','','Off'],
-    ['Mon','No dinner','','','','Off'],
-    ['Tue','Chicken and broccoli quesadillas (p. 12)','Chicken breast 500 g, plus chopped broccoli','Mon night (or thaw in cold water on Tuesday afternoon)','p12'],
-    ['Wed','Burger bowls (p. 16)','Minced beef 700 g','Tue night','p16'],
-    ['Thu','Breakfast for dinner: pancakes, sausages and smoothies','Breakfast sausages from the shop (not on the meat order). Also move the carnitas pork to the fridge tonight','\u2014','','Breakfast'],
-    ['Fri','Chicken pesto pasta (p. 22)','Chicken breast 450 g','Thu night','p22','Pasta'],
-    ['Sat','Leftovers or eat out. Rub the carnitas pork with its spices tonight and keep it in the fridge','','','']
+  [ /* WEEK 3 */
+    {d:'Sun', dish:'Sheet pan sausage and broccoli', link:'p18', tag:'Sheet pan',
+     note:'6 sausages from the shop, baby potatoes, broccoli and peppers on one tray.',
+     thaw:'', boys:'Kid-friendly as it is.', lunch:'Monday lunch'},
+    {d:'Mon', dish:'Kale Caesar salad', link:'p5',
+     note:'Chicken breast 700 g. Bottled Caesar dressing, croutons and parmesan.',
+     thaw:'Chicken breast, Sun night', boys:'Chicken strips, croutons, cheese and cucumber. No kale.', lunch:'Tuesday lunch'},
+    {d:'Tue', dish:'Chicken tacos', link:'p9',
+     note:'Boneless chicken leg 1 kg, cooked in the taco seasoning sauce.',
+     thaw:'Chicken leg (1 kg), Mon night', boys:'Leave out the cayenne. Cheese and sour cream on theirs.', lunch:'Wednesday lunch'},
+    {d:'Wed', dish:'Burger bowls', link:'p16',
+     note:'Minced beef 700 g with the fries from the freezer.',
+     thaw:'Minced beef, Tue night', boys:'Fries, beef and cheese. Ketchup instead of the sauce.', lunch:'Thursday lunch'},
+    {d:'Thu', dish:'Penne alla vodka', link:'p21',
+     note:'Cream from the freezer. The vodka is optional; use a splash of pasta water instead. Cook extra rice tonight for Friday.',
+     thaw:'Cream, Wed night', boys:'Pink pasta as it is.', lunch:'Friday lunch, adults and boys'},
+    {d:'Fri', dish:'Kimchi fried rice', link:'p29',
+     note:'No meat. Eggs for protein, peas and carrots from the freezer, rice cooked the night before. Fried egg on top.',
+     thaw:'', boys:'Fry their egg rice with peas and carrots first, then add kimchi and gochujang for the adults.', lunch:'Saturday lunch'},
+    {d:'Sat', dish:'Leftovers or eat out', note:''}
   ],
-  [
-    ['Sun','Slow cooker carnitas','Pork shoulder 1.55 kg. Switch on by 10 am. Serve in tortillas with slaw, pickled red onions and lime','Week 3, Thu night','https://www.recipetineats.com/pork-carnitas-mexican-slow-cooker-pulled-pork/'],
-    ['Mon','Simple salad (p. 4)','Add leftover carnitas for protein','\u2014','p4'],
-    ['Tue','Green chicken enchiladas (p. 11)','Chicken breast 350 g','Mon night','p11'],
-    ['Wed','Lemon chicken and spinach with orzo (p. 19)','Chicken breast 900 g','Tue night','p19'],
-    ['Thu','Lasagna night: World\u2019s Best Lasagna (Allrecipes)','Italian sausage, 2 packs from the shop. Minced pork 350 g from the spare in place of the ground beef. One pan serves 12','Wed night','https://www.allrecipes.com/recipe/23600/worlds-best-lasagna/','Lasagna'],
-    ['Fri','Larb bowls with coconut rice (Chicken Larb Bowls, p. 32)','Minced pork 500 g in place of the minced chicken','Thu night','p32'],
-    ['Sat','Leftovers or eat out','','','']
+  [ /* WEEK 4 */
+    {d:'Sun', dish:'Tomato soup and grilled cheese', link:'p35', tag:'Slow cooker',
+     note:'Slow cooker method (our change to the book): canned tomatoes, onion, garlic, tomato paste, stock, sugar and balsamic on low for 6 hours, then blend and stir in the cream. Grilled cheese with freezer mozzarella and cheddar.',
+     thaw:'Cream and mozzarella, Sat night', boys:'Grilled cheese strips for dipping.', lunch:'Monday lunch (soup)'},
+    {d:'Mon', dish:'Cobb salad', link:'p2',
+     note:'Chicken breast 700 g and bacon 250 g. Save about 100 g of bacon for Thursday.',
+     thaw:'Chicken breast and bacon, Sun night', boys:'Chicken, egg, bacon, cheese and tomatoes on a plate.', lunch:'Tuesday lunch'},
+    {d:'Tue', dish:'Shrimp tacos', link:'p8',
+     note:'1 pack of prawns. Cabbage slaw and sriracha sauce.',
+     thaw:'Prawns, Mon night', boys:'Plain prawns with cheese, no sriracha.', lunch:'Wednesday lunch'},
+    {d:'Wed', dish:'Lemon chicken and spinach with orzo', link:'p19',
+     note:'Boneless chicken leg 900 g (the book allows thighs).',
+     thaw:'Chicken leg (900 g), Tue night', boys:'Orzo and chicken as it is.', lunch:'Thursday lunch'},
+    {d:'Thu', dish:'Tortellini with peas', link:'p23',
+     note:'Peas from the freezer, freezer cream, and the saved bacon in place of the prosciutto.',
+     thaw:'Cream, Wed night', boys:'As it is.', lunch:'Friday lunch, adults and boys'},
+    {d:'Fri', dish:'Thai green curry', link:'p31',
+     note:'Boneless chicken leg 550 g. Serve with jasmine rice.',
+     thaw:'Chicken leg (550 g), Thu night', boys:'Chicken nuggets from the freezer with rice and peas and carrots.', lunch:'Saturday lunch'},
+    {d:'Sat', dish:'Leftovers or eat out', note:''}
   ]
 ];
 
-var FREEZER = [
-  ['RF Thailand chicken breast','3 packs','Wk 2 Cobb 700 g; Wk 3 quesadillas 500 g and pesto pasta 450 g; Wk 4 enchiladas 350 g and lemon chicken 900 g'],
-  ['RF Thailand chicken leg, boneless','3 packs','Wk 1 Greek chicken 900 g and chicken with peas 900 g; Wk 2 butter chicken 1 kg'],
-  ['Norway salmon fillet','4.90 lb (2.2 kg)','Wk 1 sushi bowls 1 kg; Wk 2 sheet pan salmon 1.2 kg'],
-  ['Brazil minced pork','2.19 lb (1 kg)','Wk 4 lasagna 350 g and larb bowls 500 g (about 150 g spare)'],
-  ['Brazil minced beef','3.13 lb (1.4 kg)','Wk 2 beef tacos 700 g; Wk 3 burger bowls 700 g'],
-  ['Spanish pork shoulder','4.25 lb (1.9 kg)','Wk 4 carnitas 1.55 kg (350 g spare)'],
-  ['Thailand shell-less prawns','1 pack','Wk 1 shrimp tacos'],
-  ['Smoked bacon','1.19 lb (540 g)','Wk 2 Cobb salad (all of it)']
+/* What is in the freezer now, and where it goes */
+var STOCK = [
+  ['Chicken thighs, 1 kg','Wk 1 Tue gyros (all of it)'],
+  ['Ground pork, about 900 g','Wk 1 Fri pork stir fry (all of it, double recipe)'],
+  ['Salmon','Wk 1 Wed soy-honey salmon. If it is less than about 900 g, add salmon to the meat order'],
+  ['Pizza sauce','Wk 1 Sun pizza'],
+  ['Mozzarella','Wk 1 pizza, Italian salad and eggplant bake; Wk 4 grilled cheese; mini quesadilla snacks'],
+  ['Cooking cream','Wk 2 white bean chili, Wk 3 penne alla vodka, Wk 4 tomato soup and tortellini. Buy more only when it runs out'],
+  ['Peas and carrots','Wk 2 slider side, Wk 3 kimchi fried rice, Wk 4 tortellini and curry night, boys’ rice lunches'],
+  ['Spinach','Smoothies in Week 1'],
+  ['Fries','Wk 3 Wed burger bowls'],
+  ['Chicken nuggets','Wk 4 Fri boys’ dinner on curry night'],
+  ['Frozen bananas','Wk 1 banana muffins and smoothie snacks'],
+  ['Butter','Cooking and grilled cheese']
+];
+
+/* Monthly Chung Wan order. Assumes chicken packs of about 1 kg, as in October. */
+var ORDER = [
+  ['RF Thailand chicken breast','3 packs (about 2.8 kg)','Wk 2 chili 700 g and Mexican salad 700 g; Wk 3 Kale Caesar 700 g; Wk 4 Cobb 700 g'],
+  ['RF Thailand chicken leg, boneless','4 packs (about 4 kg)','Wk 2 adobo 1.5 kg; Wk 3 tacos 1 kg; Wk 4 lemon chicken 900 g and green curry 550 g'],
+  ['Brazil minced beef','About 1.5 kg (3.3 lb)','Wk 2 quesadillas 750 g; Wk 3 burger bowls 700 g'],
+  ['Thailand shell-less prawns','1 pack','Wk 4 shrimp tacos'],
+  ['Smoked bacon','1 pack (350 to 500 g)','Wk 4 Cobb 250 g and tortellini 100 g'],
+  ['Norway salmon fillet','Only if needed','Top up Wk 1 salmon if the freezer piece is small']
 ];
 
 var SHOP = [
   { /* WEEK 1 */
     'Produce':[
-      ['Lemons','6'],['Limes','2'],['Garlic','2 heads'],['Fresh ginger','1 small knob'],
-      ['Red onions','2'],['Yellow onion','1'],['Shallot','1'],['Arugula','1 bag (about 100 g)'],
-      ['Parsley','1 bunch'],['Fresh dill and mint (optional)','1 small bunch each'],['Cherry tomatoes','1 punnet'],
-      ['Cucumbers','3'],['Small green cabbage','\u00bd'],['Cilantro','1 bunch'],['Jalape\u00f1o','1'],
-      ['Avocados','2'],['Spring onions','1 bunch'],['Fresh basil','1 pack'],['Frozen peas','450 g']
+      ['Garlic','3 heads'],['Yellow onions','3'],['Red onions','2'],['Lemons','4'],['Fresh ginger','1 knob'],
+      ['Cucumbers','2'],['Cherry tomatoes','1 punnet'],['Romaine lettuce','1 head'],['Red bell pepper','1'],
+      ['Green beans','1.2 kg'],['Broccoli','2 heads'],['Carrots','3'],['Eggplants, medium','2'],
+      ['Fresh basil','2 packs'],['Fresh dill','1 small bunch']
     ],
     'Dairy and eggs':[
-      ['Feta','100 g'],['Pecorino or parmesan','100 g'],['Mozzarella (pizza)','400 g'],
-      ['Heavy or whipping cream','300 ml'],['Sour cream or Greek yogurt','1 small tub']
+      ['Eggs (running low)','2 dozen'],['Parmesan','250 g block'],['Plain Greek yogurt (gyros sauce)','1 small tub (about 200 g)']
+    ],
+    'Deli':[
+      ['Salami or pepperoni (pizza and salad)','400 g']
     ],
     'Bread, pasta, tortillas':[
-      ['Small flour tortillas','12'],['Penne','500 g']
+      ['Sandwich bread (running low)','2 loaves'],['Flour tortillas, 8 inch (gyros and snack quesadillas)','16'],['Rigatoni','500 g']
     ],
     'Canned and jars':[
-      ['Canned tomatoes (pizza sauce)','2 \u00d7 400 g cans'],['Tomato paste','1 small tin'],
-      ['Charcuterie mix, such as salami, ham or prosciutto (pizza)','200 g'],['Nori sheets','1 pack'],
-      ['Vodka (optional)','1 small bottle']
+      ['Chickpeas','2 × 400 g cans'],['Whole peeled tomatoes','1 × 800 g can'],
+      ['Pepperoncini','1 small jar'],['Pitted black olives','1 small can'],['Strawberry jam','1 jar']
     ],
-    'Pantry and household top-ups':[
-      ['Ketchup','1 bottle'],['Jasmine rice','5 kg'],['Chicken stock cubes','1 pack'],
-      ['Cooking oil','1 bottle'],['Salt','1 pack'],['Peanut butter','1 jar'],['Toilet paper','1 pack']
+    'Baking (pizza dough)':[
+      ['Bread flour','1 kg'],['Instant yeast','1 packet']
+    ],
+    'Household':[
+      ['Paper towels','1 pack'],['Toilet paper','1 pack']
     ]
   },
   { /* WEEK 2 */
     'Produce':[
-      ['Red onions','3'],['Yellow onions','2'],['Shallots','2'],['Garlic','2 heads'],['Fresh ginger','1 knob'],
-      ['Fresno chili or red jalape\u00f1o','1'],['Cilantro','2 bunches'],['Baby potatoes','700 g'],
-      ['Romaine lettuce','3 heads'],['Avocados','3'],['Cherry tomatoes','1 punnet'],['Tomatoes, medium','2'],
-      ['Chives (optional)','1 small bunch'],['Limes','2'],['Lemons','2'],['Broccoli','2 heads'],
-      ['Carrots','4'],['Frozen peas','450 g']
+      ['Garlic','1 head'],['Yellow onions','2'],['Romaine lettuce','2 heads'],['Red bell peppers','3'],
+      ['Tomatoes, medium','3'],['Spring onions','1 bunch'],['Cilantro','3 bunches'],['Avocados','2'],
+      ['Limes','2'],['Jalapeño','1'],['Lemon','1'],['Broccolini','2 bunches (about 300 g)'],
+      ['Broccoli (adobo)','3 heads'],['Baby spinach (smoothies)','150 g']
     ],
-    'Dairy and eggs':[
-      ['Eggs (Cobb)','5'],['Cheddar','200 g'],['Heavy or whipping cream','600 ml'],['Sour cream','1 small tub'],
-      ['Fresh cheese tortellini','750 g']
+    'Frozen':[
+      ['Corn kernels','1 bag (about 500 g)']
     ],
-    'Bread and tortillas':[
-      ['Naan','5 pieces'],['Taco shells or small tortillas','16']
+    'Dairy':[
+      ['Sour cream','1 large tub (about 400 g)'],['Shredded cheddar or Monterey Jack','400 g'],
+      ['Feta','100 g'],['Parmesan','200 g'],['Swiss cheese slices','450 g']
+    ],
+    'Deli and shop meat':[
+      ['Sliced ham (sliders)','450 g'],['Italian pork sausages (Thursday pasta)','600 g']
+    ],
+    'Bread, pasta, tortillas':[
+      ['Hawaiian sweet rolls','2 packs of 12'],['Flour tortillas, 8 inch','10'],['Orecchiette','500 g'],
+      ['Tortilla chips','1 large bag']
     ],
     'Canned and jars':[
-      ['Tomato sauce or passata (butter chicken)','2 \u00d7 400 g'],['Basil pesto','1 jar']
-    ],
-    'BBQ (Sunday)':[
-      ['Sausages','10 (about 800 g)'],['Burger patties','6'],['Burger buns','6'],
-      ['Hot dogs for 12 kids','16 (2 packs)'],['Hot dog buns','26 (10 for the sausages, 16 for the kids’ hot dogs)'],
-      ['Cheese slices','1 pack'],['Lettuce for burgers','1 small head'],['Tomatoes for burgers','2'],
-      ['Grapes (extra)','1 bag'],['Cucumbers (extra)','3']
-    ],
-    'Party treats':[
-      ['Ice cream sandwiches','12 or more'],['Ice cream bars, a few flavours','2 to 3 boxes'],
-      ['Candy for the piñata','1 large bag (about 1 kg)']
-    ],
-    'Baking':[
-      ['Flour','1 kg'],['White sugar','1 kg'],['Baking powder','1 tin'],['Chocolate cake frosting','1 to 2 tubs']
-    ],
-    'Pantry top-ups':[
-      ['Dijon mustard','1 jar'],['Jam','1 jar'],['Sriracha','1 bottle'],['Seaweed','1 pack']
-    ],
-    'Household':[
-      ['CIF cleaner','1 bottle'],['Aluminium foil','1 roll']
+      ['White beans (cannellini or great northern)','4 × 400 g cans'],['Diced green chilies','1 small can'],
+      ['Tomato paste','1 small tin'],['Salsa','1 jar']
     ]
   },
   { /* WEEK 3 */
     'Produce':[
-      ['Yellow onions','3'],
-      ['Spring onions','1 bunch'],['Romaine lettuce','2 heads'],
-      ['Cherry tomatoes','1 punnet'],['Tomatoes, medium','3'],['Bell pepper','1'],['Cucumber','1'],
-      ['Lemon','1'],['Cilantro','1 bunch'],['Mushrooms','200 g'],['Broccoli (quesadillas)','1 head'],
-      ['Avocado (quesadilla sauce, optional)','1'],['Frozen corn','250 g'],['Frozen fries','1 kg']
+      ['Baby potatoes','700 g'],['Broccoli','2 heads'],['Bell peppers','2'],['Curly kale','1 bunch'],
+      ['Romaine lettuce','3 heads'],['Avocados','2'],['Limes','2'],['Tomatoes, medium','4'],
+      ['Yellow onions','2'],['Red onion','1'],['Cilantro','1 bunch'],['Garlic','1 head'],
+      ['Fresh ginger','1 knob'],['Spring onions','1 bunch'],['Fresh basil (optional)','1 pack'],
+      ['Baby spinach (smoothies)','150 g']
     ],
-    'Dairy and eggs':[
-      ['Shredded Monterey Jack or cheddar','400 g']
+    'Dairy':[
+      ['Parmesan','150 g'],['Shredded cheddar','350 g'],['Sour cream','1 small tub'],
+      ['Cooking cream (only if the freezer cream is gone)','300 ml']
+    ],
+    'Shop meat':[
+      ['Sausages (Sunday sheet pan)','6 links (about 600 g)']
     ],
     'Bread, pasta, tortillas':[
-      ['Small flour tortillas','12'],['Penne','500 g']
+      ['Croutons','1 bag'],['Small flour tortillas or taco shells','16'],['Penne','500 g']
     ],
     'Canned and jars':[
-      ['Dill pickles','1 jar']
+      ['Caesar dressing','1 bottle'],['Tomato paste','2 small tins'],['Dill pickles','1 jar'],
+      ['Kimchi','1 jar (about 400 g)'],['Gochujang','1 small tub'],['Vodka (optional)','1 small bottle']
     ],
-    'Breakfast for dinner (Thursday)':[
-      ['Breakfast sausages','1 pack (about 500 g)'],['Maple syrup','1 bottle'],['Bananas (pancakes and smoothies)','1 extra bunch'],
-      ['Frozen mixed berries (smoothies)','500 g extra'],['Yogurt (smoothies)','500 g extra']
+    'Frozen':[
+      ['French fries (only if the freezer bag is used up)','1 kg']
     ]
   },
   { /* WEEK 4 */
     'Produce':[
-      ['Broccoli','1 head'],['Garlic','3 heads'],['Yellow onions (carnitas and lasagna)','3'],['Oranges (carnitas)','2'],['Small green cabbage (carnitas slaw)','\u00bd'],['Green leaf lettuce','1 large head'],
-      ['Cucumbers','4'],['Grape tomatoes','1 punnet'],['Red onions','2'],['Avocado','1'],['Bell pepper','1'],
-      ['Lemons','6'],['Limes','5'],['Cilantro','2 bunches'],['Baby spinach','200 g'],
-      ['Kale or spinach (larb bowls)','180 g'],
-      ['Spring onions','1 bunch'],['Fresh mint','1 bunch'],['Fresh basil','1 pack']
+      ['Red onions','3'],['Garlic','1 head'],['Fresh basil','1 pack'],['Romaine lettuce','2 heads'],
+      ['Avocados','2'],['Cherry tomatoes','1 punnet'],['Small green cabbage','½'],['Cilantro','1 bunch'],
+      ['Jalapeño','1'],['Limes','4'],['Lemons','4'],['Baby spinach (orzo and smoothies)','300 g'],
+      ['Shallot','1'],['Fresh ginger','1 knob'],['Small eggplants (curry)','3'],['Snow peas','250 g'],
+      ['Thai basil','1 bunch']
     ],
-    'Dairy and eggs':[
-      ['Sour cream','1 tub (about 200 g)'],['Shredded cheddar or Monterey Jack','170 g'],['Parmesan','200 g']
+    'Dairy':[
+      ['Cheddar','300 g block'],['Parmesan','100 g'],['Sour cream','1 small tub'],
+      ['Fresh cheese tortellini','750 g'],['Cooking cream (only if the freezer cream is gone)','400 ml']
     ],
     'Bread, pasta, tortillas':[
-      ['Croutons','1 bag'],['Flour tortillas, 8 inch','9'],['Small flour tortillas (carnitas)','16'],['Orzo','500 g']
+      ['Sandwich bread (grilled cheese)','1 extra loaf'],['Small flour tortillas (tacos and snack quesadillas)','16'],['Orzo','500 g']
     ],
     'Canned and jars':[
-      ['Green chile enchilada sauce or salsa verde','2 jars (about 750 g)'],
-      ['Coconut milk','1 \u00d7 400 ml can'],['Sambal oelek','1 small jar']
-    ],
-    'Lasagna night (Thursday)':[
-      ['Sweet Italian sausage (not on the meat order)','2 packs (about 450 g)'],['Lasagna noodles','12 sheets'],
-      ['Ricotta','450 g'],['Mozzarella','340 g'],['Crushed tomatoes','1 large can (about 800 g)'],
-      ['Tomato sauce','2 small cans (about 185 g each)'],['Tomato paste','2 small cans (about 170 g each)'],
-      ['Fresh parsley','1 bunch'],['Fennel seeds','1 small jar'],['Dried basil','1 small jar']
+      ['Whole peeled tomatoes','2 × 800 g cans'],['Tomato paste','1 small tin'],['Coconut milk','2 × 400 ml cans'],
+      ['Thai green curry paste','1 jar'],['Kaffir lime leaves (optional)','1 small pack']
     ]
   }
 ];
 
-/* Added to every week's list: boys' breakfasts and lunchboxes */
+/* Added to every week's list */
 var BASICS = {
-  'Breakfast and staples':[
-    ['Milk','4 L'],['Eggs','12'],['Butter','250 g'],['Sandwich bread','2 loaves'],
-    ['Rolled oats (overnight oats and the boys’ oatmeal)','500 g'],
-    ['Almond milk','3 × 1 L'],['Yogurt, Tims or Chobani','1.5 kg'],
-    ['Frozen mixed berries','500 g'],['Baby spinach (smoothies)','150 g']
+  'Breakfast and smoothies':[
+    ['Yogurt, Tims or Chobani','1.5 kg'],['Frozen mixed berries (smoothies and oats)','500 g'],['Almond milk','3 × 1 L']
   ],
   'Fruit the boys like':[
     ['Oranges','6'],['Apples','6'],['Bananas','1 bunch'],['Kiwi','6'],['Grapes','600 g'],
     ['Strawberries','750 g'],['Blueberries','375 g'],['Raspberries','250 g']
   ],
   'Lunchboxes':[
-    ['Mortadella','250 g'],['Sliced cheese or a cheddar block','300 g'],
-    ['Carrots (for sticks)','4'],['Cucumbers (for sticks)','2'],['Cherry tomatoes','1 punnet'],
-    ['Dry pasta for lunch days','500 g'],['Frozen peas and corn','1 bag']
-  ],
-  'Snack shelf':[
-    ['Chips','2 bags'],['Popcorn (kernels or microwave bags)','1 pack']
+    ['Mortadella','250 g'],['Sliced cheese','300 g'],
+    ['Carrots (for sticks)','4'],['Cucumbers (for sticks)','2'],['Cherry tomatoes','1 punnet']
   ]
 };
 
@@ -349,62 +406,70 @@ var SNACK_RECIPES = {
 };
 var SNACKS = [
   [
-    ['Mon','Hardboiled egg and orange','Boil the eggs the night before',''],
-    ['Tue','Apple slices and peanut butter','',''],
-    ['Wed','Banana muffins','Bake on Sunday; they keep for the week',''],
-    ['Thu','Grapes and cheese slices','',''],
-    ['Fri','Mini bagel with cream cheese or peanut butter','','']
+    ['Mon','Banana muffins','Bake on Sunday with the frozen bananas. They keep for the week',''],
+    ['Tue','Mini quesadillas and banana','Tortillas and freezer mozzarella. About 5 minutes in a pan',''],
+    ['Wed','Hardboiled egg and orange','Boil the eggs the night before',''],
+    ['Thu','Smoothie with peanut butter','Frozen bananas and freezer spinach',''],
+    ['Fri','Grapes and cheese slices','','']
   ],
   [
     ['Mon','Yogurt and berries','',''],
-    ['Tue','Cheese stick or slices, meat and apple','',''],
+    ['Tue','Apple slices and peanut butter','',''],
     ['Wed','Energy balls','Make on Sunday and keep in the fridge',SNACK_RECIPES.balls],
     ['Thu','Cucumber slices and egg','Boil the eggs the night before',''],
-    ['Fri','Banana slices and peanut butter','','']
+    ['Fri','Mini bagel with cream cheese or peanut butter','','']
   ],
   [
-    ['Mon','No snack','',''],
-    ['Tue','Toast with peanut butter or jam','',''],
-    ['Wed','Chocolate zucchini muffins','Bake on Tuesday night',SNACK_RECIPES.zucchini],
-    ['Thu','Crackers, cheese sticks and kiwi','',''],
-    ['Fri','Carrots with salad dressing or mayo','','']
+    ['Mon','Cheese stick or slices, meat and apple','Mortadella from the lunchbox list',''],
+    ['Tue','Chocolate zucchini muffins','Bake on Sunday',SNACK_RECIPES.zucchini],
+    ['Wed','Carrots with salad dressing or mayo','',''],
+    ['Thu','Toast with peanut butter or jam','',''],
+    ['Fri','Crackers, cheese sticks and kiwi','','']
   ],
   [
-    ['Mon','Smoothie with peanut butter','',''],
-    ['Tue','Mini quesadillas and banana','','',],
-    ['Wed','Yogurt bark','Make on Monday night; it needs a few hours in the freezer',SNACK_RECIPES.bark],
-    ['Thu','Frozen grapes and banana slices','Freeze them the night before',''],
-    ['Fri','Cheese stick or slices, meat and apple','','']
+    ['Mon','Yogurt bark','Make on Sunday night; it needs a few hours in the freezer',SNACK_RECIPES.bark],
+    ['Tue','Banana slices and peanut butter','',''],
+    ['Wed','Frozen grapes and banana slices','Freeze them the night before. Add a cheese slice for protein',''],
+    ['Thu','Hardboiled egg and orange','Boil the eggs the night before',''],
+    ['Fri','Mini quesadillas and banana','Tortillas from the taco list, freezer mozzarella','']
   ]
 ];
-/* Snack ingredients not already covered by the weekly basics. Check the linked recipes before shopping. */
+/* Snack ingredients not covered by the weekly basics or the dinner lists */
 var SNACK_SHOP = [
-  [['Eggs (hardboiled)','6'],['Bananas (muffins)','3 extra'],['Mini bagels','1 pack'],['Cream cheese','1 small tub']],
-  [['Raisins (energy balls)','1 small box'],['Cheese sticks','1 pack'],['Eggs (hardboiled)','6']],
-  [['Zucchini (muffins)','2'],['Chocolate chips (muffins)','1 bag'],['Cocoa powder (muffins)','1 small tub'],['Crackers','1 box'],['Cheese sticks','1 pack'],['Salad dressing, such as ranch','1 bottle']],
-  [['Mini tortillas (quesadillas)','1 pack'],['Greek yogurt (yogurt bark)','500 g'],['Grapes (to freeze)','1 extra bag'],['Cheese sticks','1 pack']]
+  [],
+  [['Raisins (energy balls)','1 small box'],['Mini bagels','1 pack'],['Cream cheese','1 small tub']],
+  [['Cheese sticks','1 pack'],['Zucchini (muffins)','2'],['Chocolate chips (muffins)','1 bag'],['Cocoa powder (muffins)','1 small tub'],['Crackers','1 box'],['Salad dressing, such as ranch','1 bottle']],
+  [['Plain Greek yogurt (yogurt bark)','500 g'],['Grapes (to freeze)','1 extra bag']]
 ];
-SHOP.forEach(function(w, i){ w['Afternoon snacks'] = SNACK_SHOP[i]; });
+SHOP.forEach(function(w, i){ if (SNACK_SHOP[i].length) w['Afternoon snacks'] = SNACK_SHOP[i]; });
 
 var PANTRY = {
-  'Oils and vinegars':['Olive oil','Neutral cooking oil','Rice vinegar','Red wine vinegar','White vinegar','Apple cider vinegar (pickled onions)','Champagne or white wine vinegar (Greek chicken)'],
-  'Sauces and pastes':['Soy sauce and dark soy sauce','Fish sauce','Sesame oil','Dijon and yellow mustard','Mayonnaise','Ketchup','Worcestershire sauce','Sriracha'],
-  'Spices':['Cumin','Ground coriander','Chili powder','Paprika and smoked paprika','Dried oregano','Italian seasoning','Garam masala (butter chicken)','Cinnamon sticks','Chili flakes','Cayenne pepper','Ground nutmeg','Bay leaves','Black peppercorns','Garlic powder and onion powder','Salt'],
-  'Dry goods':['Bread flour, 1 kg, and instant yeast (Week 1 pizza dough, mixed the Saturday before)','Jasmine rice, 5 kg','Short-grain or sushi rice, 1 kg (Week 1 sushi bowls)','Plain flour','Cornflour','Sugar and brown sugar','Honey','Sesame seeds','Chicken stock cubes'],
-  'Breakfast and lunchbox':['Chia seeds, 500 g','Peanut butter (home only, one jar every two weeks)','Jam (school sandwiches, one jar every two weeks)']
+  'Oils and vinegars':['Olive oil','Neutral cooking oil','Sesame oil','Rice vinegar','Red wine vinegar','White vinegar (adobo)','Balsamic vinegar (tomato soup)'],
+  'Sauces':['Soy sauce','Dark soy sauce (stir fry)','Shaoxing cooking wine (stir fry)','Chilli garlic sauce (stir fry)','Fish sauce (curry)','Dijon and yellow mustard','Mayonnaise','Ketchup','Worcestershire sauce','Sriracha','Honey'],
+  'Spices':['Cumin','Paprika and smoked paprika','Dried oregano','Italian seasoning','Garlic powder and onion powder','Cayenne pepper','Chili flakes','Bay leaves (adobo)','Black peppercorns','Ground nutmeg (optional, tortellini)','Poppy seeds and dried minced onion (optional, sliders)','Salt'],
+  'Dry goods':['Jasmine rice, 5 kg','Plain flour (muffins)','Sugar and brown sugar','Baking powder and baking soda (muffins)','Sesame seeds','Chicken stock cubes'],
+  'Breakfast and lunchbox':['Rolled oats (overnight oats and energy balls)','Chia seeds','Peanut butter (home only)']
 };
+
+/* Lunch and breakfast routine */
+var BOYS_LUNCH = [
+  ['Mon','Mortadella sandwich'],
+  ['Tue','Pasta with butter, cheese and peas and carrots'],
+  ['Wed','Strawberry jam sandwich (no peanut butter at school)'],
+  ['Thu','Rice with scrambled egg and peas and carrots'],
+  ['Fri','Thursday’s pasta: eggplant bake (Wk 1), sausage pasta (Wk 2), penne alla vodka (Wk 3), tortellini (Wk 4)']
+];
 
 /* Menu book pages, for dishes without their own recipe link. 'p25' opens menu-book/page-25.pdf */
 var BOOK_URL = 'https://kstanulis.github.io/grocery-list/menu-book/';
 function bookPage(code){ var n = code.slice(1); return BOOK_URL + 'page-' + (n.length < 2 ? '0' + n : n) + '.pdf'; }
 
 /* ---------- STATE ---------- */
-var KEY = 'dinner-plan-ticks-v1';
+var KEY = 'food-2026-11-ticks';
 var ticks = {};
 try { ticks = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch(e){ ticks = {}; }
 function saveTicks(){ try { localStorage.setItem(KEY, JSON.stringify(ticks)); } catch(e){} }
-/* Items already at home, and extra items added during the week. Saved on this device only. */
-var HAVE_KEY = 'dinner-plan-have-v1', EXTRA_KEY = 'dinner-plan-extra-v1';
+var HAVE_KEY = 'food-2026-11-have', EXTRA_KEY = 'food-2026-11-extra';
 function load(k){ try { return JSON.parse(localStorage.getItem(k) || '{}') || {}; } catch(e){ return {}; } }
 function store(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
 var haves = load(HAVE_KEY), extras = load(EXTRA_KEY);
@@ -419,6 +484,13 @@ function el(tag, attrs, kids){
   }
   (kids || []).forEach(function(c){ if (c) n.appendChild(c); });
   return n;
+}
+function metaLine(label, text){
+  return el('div', {class:'meta'}, [el('b', {text:label + ': '}), document.createTextNode(text)]);
+}
+function weekTitle(i){
+  var a = START + i * 7;
+  return el('h2', null, [document.createTextNode('Week ' + (i+1) + ' '), el('span', {text:'Sun ' + a + ' – Sat ' + (a + 6) + ' ' + MONTH})]);
 }
 
 var uid = 0;
@@ -456,63 +528,57 @@ function checklist(prefix, groups, withQty){
 function menuPanel(){
   var p = el('section', {class:'panel', id:'p-menu', role:'tabpanel'});
   p.appendChild(el('div', {class:'note'}, [
-    el('p', {text:'Monday to Friday follow theme nights. Each week runs Sunday to Saturday. Sundays are an easy meal: slow cooker, sheet pan pizza or a BBQ. The prep is done the Saturday before, at the end of the previous week, so Sunday is switch-on or topping only. Saturday is otherwise open for leftovers or eating out.'}),
-    el('p', {text:'Underlined dishes open the recipe, either online or the page from the menu book.'}),
-    el('p', {text:'Lunches'}),
-    (function(){
-      var ul = el('ul');
-      ['Parents: last night’s leftovers. Sunday’s slow cooker meal covers Monday (on pizza Sunday, bake a second tray), and Friday’s rice covers Saturday.',
-       'Parents, weekdays: an overnight oats jar and a smoothie',
-       'Boys, Monday: mortadella sandwich',
-       'Boys, Tuesday: pasta with leftover sauce, or plain pasta with butter and peas',
-       'Boys, Wednesday: jam sandwich (no peanut butter at school)',
-       'Boys, Thursday: rice with egg, peas and corn, or a leftover rice dish',
-       'Boys, Friday: leftover Thursday pasta'].forEach(function(t){ ul.appendChild(el('li', {text:t})); });
-      return ul;
-    })()
+    el('p', {text:'Monday to Friday follow the menu book’s theme nights. Each week runs Sunday to Saturday. Sundays are slow cooker or sheet pan. Saturday is leftovers or eating out.'}),
+    el('p', {text:'Each dinner shows what to move from the freezer to the fridge the night before, how to adjust it for the boys, and which lunch the leftovers cover. Underlined dishes open the menu book page.'})
   ]));
   MENU.forEach(function(week, i){
-    var w = el('div', {class:'week'}, [el('h2', {text:'Week ' + (i+1)})]);
+    var w = el('div', {class:'week'}, [weekTitle(i)]);
     week.forEach(function(n){
-      var d = DAYS[n[0]];
-      var chip = el('div', {class:'chip'}, [document.createTextNode(n[0]), el('small', {text:n[5] || d.theme})]);
+      var d = DAYS[n.d];
+      var chip = el('div', {class:'chip'}, [document.createTextNode(n.d + ' ' + dateOf(i, n.d)), el('small', {text:n.tag || d.theme})]);
       chip.style.setProperty('--h', d.h);
-      var link = /^p\d+$/.test(n[4]) ? bookPage(n[4]) : n[4];
-      var dishEl = link ? el('a', {class:'dish', href:link, target:'_blank', rel:'noopener', text:n[1]}) : el('div', {class:'dish', text:n[1]});
+      var link = n.link ? (/^p\d+$/.test(n.link) ? bookPage(n.link) : n.link) : '';
+      var dishEl = link ? el('a', {class:'dish', href:link, target:'_blank', rel:'noopener', text:n.dish + ' (p. ' + n.link.slice(1) + ')'}) : el('div', {class:'dish', text:n.dish});
       var body = el('div', null, [dishEl]);
-      if (n[2]) body.appendChild(el('div', {class:'meta', text:n[2]}));
-      if (n[3] && n[3] !== '—') body.appendChild(el('div', {class:'meta', text:'Move to fridge: ' + n[3]}));
-      w.appendChild(el('div', {class:'night' + (n[0] === 'Sat' || n[1] === 'No dinner' ? ' flex' : '')}, [chip, body]));
+      if (n.note) body.appendChild(el('div', {class:'meta', text:n.note}));
+      if (n.thaw) body.appendChild(metaLine('Move to fridge', n.thaw));
+      if (n.boys) body.appendChild(metaLine('Boys', n.boys));
+      if (n.lunch) body.appendChild(metaLine('Leftovers', n.lunch));
+      w.appendChild(el('div', {class:'night' + (n.d === 'Sat' ? ' flex' : '')}, [chip, body]));
     });
     p.appendChild(w);
   });
   return p;
 }
 
+function table(head, rows, qtyCol){
+  var tbody = el('tbody');
+  rows.forEach(function(r){
+    tbody.appendChild(el('tr', null, r.map(function(c, j){ return el('td', {class: j === qtyCol ? 'qty' : '', text:c}); })));
+  });
+  return el('div', {class:'tablewrap'}, [el('table', null, [
+    el('thead', null, [el('tr', null, head.map(function(h){ return el('th', {text:h}); }))]), tbody
+  ])]);
+}
+
 function freezerPanel(){
   var p = el('section', {class:'panel', id:'p-freezer', role:'tabpanel'});
-  p.appendChild(el('h2', {text:'Monthly frozen wholesale order'}));
-  p.appendChild(el('p', {class:'sub', text:'Your Chung Wan order of 6 October (HK$1,485). Portion into meal-size bags and label each bag with the week and night. The chicken amounts assume packs of about 1 kg; if your packs are bigger, there is spare.'}));
-  var tbody = el('tbody');
-  FREEZER.forEach(function(r){
-    tbody.appendChild(el('tr', null, [el('td', {text:r[0]}), el('td', {class:'qty', text:r[1]}), el('td', {text:r[2]})]));
-  });
-  var table = el('table', null, [
-    el('thead', null, [el('tr', null, [el('th', {text:'Item'}), el('th', {text:'Buy'}), el('th', {text:'Used in'})])]),
-    tbody
-  ]);
-  p.appendChild(el('div', {class:'tablewrap'}, [table]));
+  p.appendChild(el('h2', {text:'Chung Wan meat order'}));
+  p.appendChild(el('p', {class:'sub', text:'One run for the month. Week 1 does not need it, so go any time before Saturday 7 November. Portion into meal-size bags and label each with the week and night. Chicken amounts assume packs of about 1 kg.'}));
+  p.appendChild(table(['Item','Buy','Used in'], ORDER, 1));
+  p.appendChild(el('p', {class:'fine', text:'Sausages (Wk 2 and Wk 3) and ham (Wk 2) come from the local shop and are on those weeks’ lists.'}));
+  p.appendChild(el('h2', {text:'Already in the freezer'}));
+  p.appendChild(el('p', {class:'sub', text:'This is what was there on 31 October and where each item gets used. None of it is on the shopping lists.'}));
+  p.appendChild(table(['Item','Used in'], STOCK, -1));
   p.appendChild(el('h2', {text:'Where the savings come from'}));
   var ul = el('ul');
   [
-    'All meat is one trip. The weekly shop is produce, dairy and pantry only.',
-    'Some meat is spare after the Week 2 and 3 changes: about 150 g minced pork and 350 g pork shoulder. Keep it frozen for next month. The Week 2 BBQ sausages and burgers and Week 4’s lasagna sausage come from the local shop.',
-    'Cilantro, limes, avocados, cabbage and tortillas repeat across nights in the same week, so nothing is bought for a single dish.',
-    'Tortillas freeze well. Buy the 16 or 20 pack and freeze what is left after taco night.',
-    'Spring onions, herbs, ginger, green beans and broccoli are usually cheaper at a wet market than a supermarket.',
-    'Cook extra rice with Week 2 Monday’s butter chicken for the boys’ Thursday rice lunch. Cold rice also makes the best fried rice.',
-    'Frozen berries cost much less than fresh. Use them in the overnight oats jars (they thaw overnight) and buy fresh berries only for the boys.',
-    'Compare the price per 100 g on pasta, rice, canned beans and cheese. Store brands often cost the least.'
+    'Week 1 runs almost entirely on freezer stock: the chicken thighs, ground pork, salmon, pizza sauce and mozzarella.',
+    'The salami pack covers Sunday pizza and Monday’s salad. Cilantro, limes, avocado and tortilla chips cover Sunday chili and Monday’s salad in Week 2.',
+    'Kimchi fried rice in Week 3 has no meat; eggs are the protein.',
+    'Big-batch dinners (eggplant bake, sliders, adobo, tomato soup) cover the next day’s lunches for adults and boys.',
+    'Tortillas freeze well. Freeze what is left after taco night and use them for snack quesadillas.',
+    'Canned tomatoes are cheaper than fresh for the tomato soup and taste the same once blended.'
   ].forEach(function(t){ ul.appendChild(el('li', {text:t})); });
   p.appendChild(ul);
   return p;
@@ -525,7 +591,6 @@ function weekPanel(i){
 }
 
 function weekItems(i){
-  /* Every listed item for week i that is still needed: [group, key, name, qty] */
   var out = [];
   (extras['w' + i] || []).forEach(function(x){ out.push(['Added this week', 'w' + i + '|x|' + x.id, x.name, '']); });
   [['d', SHOP[i]], ['b', BASICS]].forEach(function(pair){
@@ -543,13 +608,13 @@ function renderWeek(i, p){
   p = p || document.getElementById('p-w' + i);
   p.textContent = '';
   var pre = 'w' + i + '|';
+  var a = START + i * 7;
   p.appendChild(el('div', {class:'listhead'}, [
     el('h2', {text:'Week ' + (i+1) + ' shopping list', style:'margin:0'}),
     el('span', {class:'progress', id:'prog-' + i})
   ]));
-  p.appendChild(el('p', {class:'sub', text:'Tap “Have it” for anything already at home, and add extras from the whiteboard. Changes are saved on this phone, so share the list when someone else is shopping.'}));
+  p.appendChild(el('p', {class:'sub', text:'For dinners Sun ' + a + ' to Fri ' + (a + 5) + ' ' + MONTH + '. Tap “Have it” for anything already at home, and add extras from the whiteboard. Changes are saved on this phone, so share the list when someone else is shopping.'}));
 
-  /* Add an item */
   var input = el('input', {type:'text', id:'add-w' + i, placeholder:'Add an item, e.g. butter', 'aria-label':'Add an item to Week ' + (i+1), autocomplete:'off', enterkeyhint:'done'});
   var form = el('form', {class:'addrow'}, [input, el('button', {class:'primary', type:'submit', text:'Add'})]);
   form.addEventListener('submit', function(e){
@@ -563,7 +628,6 @@ function renderWeek(i, p){
   });
   p.appendChild(form);
 
-  /* Share what is still needed */
   var status = el('span', {class:'status', role:'status'});
   var share = el('button', {class:'ghost', type:'button', text:'Share list'});
   var shareBox = el('div');
@@ -571,7 +635,6 @@ function renderWeek(i, p){
   p.appendChild(el('div', {class:'sharerow'}, [share, status]));
   p.appendChild(shareBox);
 
-  /* Added this week */
   var added = extras['w' + i] || [];
   if (added.length){
     var box = el('div', {class:'group'}, [el('h3', {text:'Added this week'})]);
@@ -585,7 +648,6 @@ function renderWeek(i, p){
     p.appendChild(box);
   }
 
-  /* The planned list, minus anything already at home */
   var haveList = [];
   function groups(code, data, title){
     p.appendChild(el('h3', {text:title}));
@@ -604,8 +666,8 @@ function renderWeek(i, p){
       if (shown) p.appendChild(box);
     });
   }
-  groups('d', SHOP[i], 'Dinners');
-  groups('b', BASICS, 'Breakfast, fruit, lunchboxes and snacks');
+  groups('d', SHOP[i], 'Dinners, snacks and extras');
+  groups('b', BASICS, 'Every week: breakfast, fruit and lunchboxes');
 
   if (haveList.length){
     var det = el('details', {class:'haves'}, [el('summary', {text:'Already have (' + haveList.length + ')'})]);
@@ -617,7 +679,6 @@ function renderWeek(i, p){
     p.appendChild(det);
   }
 
-  /* Reset, with a second tap to confirm */
   var reset = el('button', {class:'ghost', type:'button', text:'Reset this week'});
   var armed = null;
   reset.addEventListener('click', function(){
@@ -634,7 +695,7 @@ function renderWeek(i, p){
     renderWeek(i);
   });
   p.appendChild(el('div', {class:'tools'}, [reset]));
-  p.appendChild(el('p', {class:'fine', text:'Amounts are rounded for about six adult portions per dinner. Meat is not listed because it comes from the freezer.'}));
+  p.appendChild(el('p', {class:'fine', text:'Amounts are rounded for about six adult portions per dinner. Eggs, butter, milk, bread and chips are always stocked, so they only appear when you said they were low. Meat is on the Meat order tab; spices and sauces are on the Pantry tab.'}));
   if (document.getElementById('prog-0')) updateProgress();
 }
 
@@ -669,30 +730,48 @@ function snackPanel(){
   var p = el('section', {class:'panel', id:'p-snacks', role:'tabpanel'});
   var sheet = el('a', {href:SNACK_SHEET, target:'_blank', rel:'noopener', text:'Open the original snack sheet'});
   p.appendChild(el('div', {class:'note'}, [
-    el('p', {text:'Snack time is 2 to 3 pm. The boys choose one item from the snack shelf plus the day’s snack below, and nothing else. Each snack has some protein or fat to keep them going.'}),
+    el('p', {text:'Snack time is 2 to 3 pm. The boys choose one item from the snack shelf plus the day’s snack plate below, and nothing else. Each plate has some protein or fat to keep them going.'}),
     el('p', null, [sheet])
   ]));
   SNACKS.forEach(function(week, i){
-    var w = el('div', {class:'week'}, [el('h2', {text:'Week ' + (i+1)})]);
+    var w = el('div', {class:'week'}, [weekTitle(i)]);
     week.forEach(function(n){
       var d = DAYS[n[0]];
-      var chip = el('div', {class:'chip'}, [document.createTextNode(n[0])]);
+      var chip = el('div', {class:'chip'}, [document.createTextNode(n[0] + ' ' + dateOf(i, n[0]))]);
       chip.style.setProperty('--h', d.h);
       var dishEl = n[3] ? el('a', {class:'dish', href:n[3], target:'_blank', rel:'noopener', text:n[1]}) : el('div', {class:'dish', text:n[1]});
       var body = el('div', null, [dishEl]);
       if (n[2]) body.appendChild(el('div', {class:'meta', text:n[2]}));
-      w.appendChild(el('div', {class:'night' + (n[1] === 'No snack' ? ' flex' : '')}, [chip, body]));
+      w.appendChild(el('div', {class:'night'}, [chip, body]));
     });
     p.appendChild(w);
   });
-  p.appendChild(el('p', {class:'fine', text:'Ingredients for these snacks are under “Afternoon snacks” on each week’s shopping list. Fruit, yogurt, cheese slices, bread and milk come from the weekly basics.'}));
+  p.appendChild(el('p', {class:'fine', text:'Snack ingredients are under “Afternoon snacks” on each week’s shopping list. Week 1 needs nothing extra. Fruit, yogurt, cheese slices and mortadella come from the weekly basics.'}));
+  return p;
+}
+
+function lunchPanel(){
+  var p = el('section', {class:'panel', id:'p-lunch', role:'tabpanel'});
+  p.appendChild(el('h2', {text:'Adult lunches'}));
+  p.appendChild(el('p', {class:'sub', text:'Last night’s dinner, every day. The Menu tab shows which lunch each dinner covers. Sunday’s meal covers Monday, and Friday’s rice dish covers Saturday.'}));
+  p.appendChild(el('h2', {text:'Boys’ packed lunches'}));
+  var rows = BOYS_LUNCH.map(function(r){ return [r[0], r[1]]; });
+  p.appendChild(table(['Day','Lunchbox'], rows, 0));
+  p.appendChild(el('p', {class:'fine', text:'Add carrot or cucumber sticks, cherry tomatoes and a fruit to every box. No peanut butter at school.'}));
+  p.appendChild(el('h2', {text:'Weekday breakfast'}));
+  var ul = el('ul');
+  [
+    'Overnight oats jar (make the night before): oats, almond milk, peanut butter, Tims or Chobani yogurt, chia and frozen berries. The berries thaw overnight.',
+    'Smoothie: frozen berries, spinach, peanut butter and almond milk. Use the freezer spinach and frozen bananas in Week 1.'
+  ].forEach(function(t){ ul.appendChild(el('li', {text:t})); });
+  p.appendChild(ul);
   return p;
 }
 
 function pantryPanel(){
   var p = el('section', {class:'panel', id:'p-pantry', role:'tabpanel'});
   p.appendChild(el('h2', {text:'Monthly pantry check'}));
-  p.appendChild(el('p', {class:'sub', text:'Look through the cupboard before the first shop of the month and tick what needs buying. These items are used across several weeks.'}));
+  p.appendChild(el('p', {class:'sub', text:'Look through the cupboard before the Week 1 shop and tick what needs buying. These are used across several November recipes.'}));
   p.appendChild(checklist('pantry', PANTRY, false));
   var clear = el('button', {class:'ghost', type:'button', text:'Clear ticks'});
   clear.addEventListener('click', function(){
@@ -706,9 +785,11 @@ function pantryPanel(){
 
 function updateProgress(){
   for (var i = 0; i < 4; i++){
-    var all = document.getElementById('p-w' + i).querySelectorAll('.group input[type=checkbox]');
+    var panel = document.getElementById('p-w' + i), out = document.getElementById('prog-' + i);
+    if (!panel || !out) continue;
+    var all = panel.querySelectorAll('.group input[type=checkbox]');
     var done = 0; all.forEach(function(c){ if (c.checked) done++; });
-    document.getElementById('prog-' + i).textContent = done + ' of ' + all.length + ' ticked';
+    out.textContent = done + ' of ' + all.length + ' ticked';
   }
 }
 
@@ -717,9 +798,10 @@ var main = document.getElementById('main');
 var tablist = document.getElementById('tablist');
 var defs = [
   ['Menu', menuPanel()],
-  ['Freezer order', freezerPanel()],
+  ['Meat order', freezerPanel()],
   ['Week 1', weekPanel(0)], ['Week 2', weekPanel(1)], ['Week 3', weekPanel(2)], ['Week 4', weekPanel(3)],
   ['Snacks', snackPanel()],
+  ['Lunch & breakfast', lunchPanel()],
   ['Pantry', pantryPanel()]
 ];
 var tabs = [];
