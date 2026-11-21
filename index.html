@@ -232,9 +232,9 @@ var MENU = [
     {d:'Sat', dish:'Leftovers or eat out', note:''}
   ],
   [ /* WEEK 4 */
-    {d:'Sun', dish:'Slow cooker butter chicken', link:'p34', tag:'Slow cooker',
-     note:'Boneless chicken leg about 1 kg: the 550 g freed from Friday plus any spare. Use 1 jar of passata plus a quarter of the second in place of the canned tomato sauce. Potatoes, red onion, half a naan and cilantro stems go in first, chicken on top, then garam masala, salt, butter, a cinnamon stick and the passata. Low for 7 hours, then stir in the cream. If chicken is short, add the can of chickpeas from the cupboard (our change to the book).',
-     thaw:'Chicken leg (about 1 kg) and cream, Sat night', boys:'Leave out the chili. Mild once the cream is in. Serve with naan and rice.', lunch:'Monday lunch'},
+    {d:'Sun', dish:'Butter chicken (RecipeTin Eats)', link:'https://www.recipetineats.com/butter-chicken/', tag:'Stovetop',
+     note:'New idea, not in the menu book. Make 1.5 times the recipe: boneless chicken leg about 1.1 kg (the 550 g freed from Friday plus any spare), cut into bite-size pieces. Marinate in yogurt, lemon, turmeric, garam masala, cumin, ginger and garlic for at least 3 hours (Sunday morning is fine). Then about 3 minutes in a hot pan, add 1 jar of passata, the cream, sugar and salt, and simmer for 20 minutes. Serve with rice. If chicken is short, add the can of chickpeas with the passata (our change).',
+     thaw:'Chicken leg (about 1.1 kg) and cream, Sat night', boys:'Leave out the chilli powder. Mild and creamy.', lunch:'Monday lunch'},
     {d:'Mon', dish:'Cobb salad', link:'p2',
      note:'Chicken breast 700 g and bacon 250 g. Save about 100 g of bacon for Thursday.',
      thaw:'Chicken breast and bacon, Sun night', boys:'Chicken, egg, bacon, cheese and tomatoes on a plate.', lunch:'Tuesday lunch'},
@@ -265,7 +265,8 @@ var STOCK = [
   ['Fries','Wk 3 Wed burger bowls'],
   ['Chicken nuggets','Spare: a quick boys’ dinner on any busy night'],
   ['Frozen bananas','Wk 1 banana muffins and smoothie snacks'],
-  ['Butter','Cooking and Wk 4 butter chicken']
+  ['Butter','Cooking and Wk 4 butter chicken'],
+  ['Chicken leg','The 550 g planned for Wk 4 Friday now goes into Sunday’s butter chicken']
 ];
 
 /* Monthly Chung Wan order. Assumes chicken packs of about 1 kg, as in October. */
@@ -360,17 +361,18 @@ var SHOP = [
   },
   { /* WEEK 4 */
     'Produce':[
-      ['Baby potatoes (butter chicken)','700 g'],['Red onions','2'],['Garlic','1 head'],['Romaine lettuce','2 heads'],
+      ['Fresh ginger (butter chicken)','1 knob'],['Red onions','2'],['Garlic','1 head'],['Romaine lettuce','2 heads'],
       ['Avocados','2'],['Cherry tomatoes','1 punnet'],['Small green cabbage','½'],['Cilantro','1 bunch'],
       ['Jalapeño','1'],['Limes','3'],['Lemons','4'],['Baby spinach (orzo and smoothies)','300 g'],
       ['Shallot','1']
     ],
     'Dairy':[
       ['Cheddar','100 g block'],['Parmesan','100 g'],['Sour cream','1 small tub'],
-      ['Fresh cheese tortellini','750 g'],['Cooking cream (only if the freezer cream is gone)','400 ml']
+      ['Fresh cheese tortellini','750 g'],['Plain full-fat yogurt (butter chicken marinade)','200 g'],
+      ['Cooking cream (only if the freezer cream is gone)','750 ml']
     ],
     'Bread, pasta, tortillas':[
-      ['Naan (butter chicken)','5 pieces'],['Small flour tortillas (tacos and snack quesadillas)','16'],['Orzo','500 g']
+      ['Small flour tortillas (tacos and snack quesadillas)','16'],['Orzo','500 g']
     ],
     'Canned and jars':[
       ['Chickpeas (only if the cupboard can is used up)','1 × 400 g can']
@@ -442,7 +444,7 @@ SHOP.forEach(function(w, i){ if (SNACK_SHOP[i].length) w['Afternoon snacks'] = S
 var PANTRY = {
   'Oils and vinegars':['Olive oil','Neutral cooking oil','Sesame oil','Rice vinegar','Red wine vinegar','White vinegar (adobo)','Balsamic vinegar'],
   'Sauces':['Soy sauce','Dark soy sauce (stir fry)','Shaoxing cooking wine (stir fry)','Chilli garlic sauce (stir fry)','Dijon and yellow mustard','Mayonnaise','Ketchup','Worcestershire sauce','Sriracha','Honey'],
-  'Spices':['Garam masala and cinnamon sticks (butter chicken)','Cumin','Paprika and smoked paprika','Dried oregano','Italian seasoning','Garlic powder and onion powder','Cayenne pepper','Chili flakes','Bay leaves (adobo)','Black peppercorns','Ground nutmeg (optional, tortellini)','Poppy seeds and dried minced onion (optional, sliders)','Salt'],
+  'Spices':['Garam masala and turmeric (butter chicken)','Cumin','Paprika and smoked paprika','Dried oregano','Italian seasoning','Garlic powder and onion powder','Cayenne pepper','Chili flakes','Bay leaves (adobo)','Black peppercorns','Ground nutmeg (optional, tortellini)','Poppy seeds and dried minced onion (optional, sliders)','Salt'],
   'Dry goods':['Jasmine rice, 5 kg','Plain flour (muffins)','Sugar and brown sugar','Baking powder and baking soda (muffins)','Sesame seeds','Chicken stock cubes'],
   'Breakfast and lunchbox':['Rolled oats (overnight oats and energy balls)','Chia seeds','Peanut butter (home only)']
 };
@@ -534,7 +536,7 @@ function menuPanel(){
       var chip = el('div', {class:'chip'}, [document.createTextNode(n.d + ' ' + dateOf(i, n.d)), el('small', {text:n.tag || d.theme})]);
       chip.style.setProperty('--h', d.h);
       var link = n.link ? (/^p\d+$/.test(n.link) ? bookPage(n.link) : n.link) : '';
-      var dishEl = link ? el('a', {class:'dish', href:link, target:'_blank', rel:'noopener', text:n.dish + ' (p. ' + n.link.slice(1) + ')'}) : el('div', {class:'dish', text:n.dish});
+      var dishEl = link ? el('a', {class:'dish', href:link, target:'_blank', rel:'noopener', text:n.dish + (/^p\d+$/.test(n.link) ? ' (p. ' + n.link.slice(1) + ')' : '')}) : el('div', {class:'dish', text:n.dish});
       var body = el('div', null, [dishEl]);
       if (n.note) body.appendChild(el('div', {class:'meta', text:n.note}));
       if (n.thaw) body.appendChild(metaLine('Move to fridge', n.thaw));
