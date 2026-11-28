@@ -168,7 +168,7 @@ var WEEK_TABS = ['Week 1', 'Week 2'];
 /* [day, dish, meat and notes, move meat to fridge, recipe link, chip label (optional), kid tip] */
 var MENU = [
   [
-    ['Sat','Tonight: white bean and pancetta soup with kale (new recipe, not in the menu book)','Uses the 2 cans of white beans and the can of tomatoes at home. Fry about 200 g diced pancetta in a big pot until crisp. Add 1 chopped onion, 2 carrots, 2 celery sticks and 3 garlic cloves; cook 8 minutes. Add the drained beans, the canned tomatoes, a punnet of halved cherry tomatoes, about 1 litre of chicken stock from cubes, 1 tsp Italian seasoning and a bay leaf. Simmer 25 minutes and mash some of the beans to thicken. Stir in a bunch of chopped kale (stalks removed) for the last 5 minutes. Serve with toast. Leftovers cover Sunday lunch','—','','Tonight','Serve with toast or grilled cheese strips for dipping.'],
+    ['Sat','Tonight: white bean, chorizo and kale soup (Jamie Oliver 20-minute meal, with chorizo in place of bacon; not in the menu book)','Uses the 2 cans of white beans and the can of tomatoes at home. 1) Chop about 200 g chorizo into chunks and fry in a big pot until the edges crisp. 2) Add 1 chopped onion and 3 garlic cloves (plus 2 carrots and 2 celery sticks, if using) and cook until soft, about 5 minutes. 3) Stir in a punnet of halved cherry tomatoes, the canned tomatoes and the drained beans. 4) Add about 750 ml chicken stock from cubes, salt and 1 tsp Italian seasoning; simmer 10 minutes until the tomatoes soften. 5) Stir in a bunch of chopped kale (stalks removed) and cook 3 to 4 minutes. Finish with chopped chives. Serve with toast. Leftovers cover Sunday lunch','—','','Tonight','Buy mild chorizo and cut the boys’ pieces small. Serve with toast or grilled cheese strips for dipping.'],
     ['Sun','Black bean sweet potato chili (p. 38)','No meat. Cook on the stove (about 45 minutes) or put everything in the slow cooker on low for 6 hours. Serve with tortilla chips, avocado and cheese. Makes 6 servings, enough for Monday lunches','—','p38','Slow cooker','Leave out the chipotles and use 1 tsp smoked paprika instead. Adults can stir chipotle into their own bowls.'],
     ['Mon','Protein with greens: Mediterranean chicken (p. 14)','Chicken breast, about 900 g: the pack already in the freezer. Toss with olive oil, lemon, oregano, salt and pepper; roast on one tray with bell peppers, zucchini and red onion at 220°C for 25 minutes. Make enough for Tuesday lunches','Sun night','p14','','Butter pasta: boil 250 g small pasta, drain, stir in butter and a little parmesan. Serve with plain chicken pieces.'],
     ['Tue','Pasta with sausage and broccolini (p. 24)','Pork sausages, about 700 g, from the same shop as Sunday’s. Broccoli works if there is no broccolini. Make extra for Wednesday lunches','—','p24','Pasta','Skip the chilli flakes.'],
@@ -203,7 +203,7 @@ var FREEZER = [
 var SHOP = [
   { /* WEEK 1 */
     'Buy today: Sat soup and Sun chili':[
-      ['Diced pancetta (Sat soup)','200 g'],['Cherry tomatoes (soup)','1 punnet'],['Kale (soup)','1 bunch'],['Yellow onions (soup and chili)','2'],['Carrots (soup)','2'],['Celery (soup)','2 sticks'],['Garlic (soup and chili)','1 head'],
+      ['Mild chorizo (Sat soup)','200 g'],['Cherry tomatoes (soup)','1 punnet'],['Kale (soup)','1 bunch'],['Fresh chives (soup)','1 small bunch'],['Yellow onions (soup and chili)','2'],['Carrots (soup, optional)','2'],['Celery (soup, optional)','2 sticks'],['Garlic (soup and chili)','1 head'],
       ['Sweet potatoes (chili)','700 g'],['Black beans (chili)','2 × 400 g cans'],['Diced tomatoes, fire-roasted if possible (chili)','2 × 400 g cans'],
       ['Orange juice (chili)','1 small carton'],['Lime (chili)','1'],['Frozen corn (chili)','1 bag (about 300 g)'],['Avocado (chili topping)','1'],
       ['Chipotles in adobo (adults only, optional)','1 small can']
@@ -375,7 +375,7 @@ function menuPanel(){
     (function(){
       var ul = el('ul');
       ['Parents, weekdays: last night’s dinner for lunch, plus an overnight oats jar and a smoothie for breakfast.',
-       'Week 1 parent lunches: Sun bean and pancetta soup • Mon chili • Tue Mediterranean chicken • Wed sausage pasta • Thu pork and green beans • Fri tacos as a rice bowl • Sat chicken adobo',
+       'Week 1 parent lunches: Sun chorizo and bean soup • Mon chili • Tue Mediterranean chicken • Wed sausage pasta • Thu pork and green beans • Fri tacos as a rice bowl • Sat chicken adobo',
        'Week 2 parent lunches: Mon gyros in pita • Tue salmon, broccoli and rice • Wed buffalo wrap (make 2 extra) • Thu white bean chili • Fri eggplant bake • Sat kimchi fried rice',
        'Boys, Monday: mortadella sandwich',
        'Boys, Tuesday: plain pasta with butter and peas',
@@ -424,7 +424,7 @@ function freezerPanel(){
   p.appendChild(table(FREEZER_HAVE));
   p.appendChild(el('h2', {text:'From the local shop instead'}));
   var ul0 = el('ul');
-  ['Diced pancetta, about 200 g, for tonight’s soup', 'Pork sausages, about 700 g, for Week 1 Tuesday'].forEach(function(t){ ul0.appendChild(el('li', {text:t})); });
+  ['Mild chorizo, about 200 g, for tonight’s soup', 'Pork sausages, about 700 g, for Week 1 Tuesday'].forEach(function(t){ ul0.appendChild(el('li', {text:t})); });
   p.appendChild(ul0);
   p.appendChild(el('h2', {text:'Where the savings come from'}));
   var ul = el('ul');
