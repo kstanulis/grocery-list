@@ -144,7 +144,7 @@ textarea.sharetext{width:100%; min-height:160px; font:inherit; font-size:.9rem; 
 </head>
 <body>
 <header class="top">
-  <h1>Dinner plan and grocery lists: 29 November to 12 December</h1>
+  <h1>Dinner plan and grocery lists: 28 November to 12 December</h1>
   <p class="sub">Two weeks this time. Meat comes from the freezer and one Chung Wan order. Everything else is one local shop per week. Amounts cover 3 adults and 2 children at dinner, plus next-day leftovers for two adult lunches. Tap a tab to switch sections; ticks on the shopping lists are saved on your device.</p>
 </header>
 
@@ -162,13 +162,14 @@ var DAYS = {
 };
 
 /* Week labels shown on the menu and list tabs */
-var WEEKS = ['Week 1: 29 Nov to 5 Dec', 'Week 2: 6 to 12 Dec'];
+var WEEKS = ['Week 1: 28 Nov to 5 Dec', 'Week 2: 6 to 12 Dec'];
 var WEEK_TABS = ['Week 1', 'Week 2'];
 
 /* [day, dish, meat and notes, move meat to fridge, recipe link, chip label (optional), kid tip] */
 var MENU = [
   [
-    ['Sun','Sheet pan sausage and broccoli (p. 18)','Pork sausages, about 650 g, from the local shop. Baby potatoes, broccoli and bell pepper on one tray. About 40 minutes, mostly in the oven','—','p18','','Cut the boys’ sausage coins in half.'],
+    ['Sat','Tonight: white bean and pancetta soup with kale (new recipe, not in the menu book)','Uses the 2 cans of white beans and the can of tomatoes at home. Fry about 200 g diced pancetta in a big pot until crisp. Add 1 chopped onion, 2 carrots, 2 celery sticks and 3 garlic cloves; cook 8 minutes. Add the drained beans, the canned tomatoes, a punnet of halved cherry tomatoes, about 1 litre of chicken stock from cubes, 1 tsp Italian seasoning and a bay leaf. Simmer 25 minutes and mash some of the beans to thicken. Stir in a bunch of chopped kale (stalks removed) for the last 5 minutes. Serve with toast. Leftovers cover Sunday lunch','—','','Tonight','Serve with toast or grilled cheese strips for dipping.'],
+    ['Sun','Black bean sweet potato chili (p. 38)','No meat. Cook on the stove (about 45 minutes) or put everything in the slow cooker on low for 6 hours. Serve with tortilla chips, avocado and cheese. Makes 6 servings, enough for Monday lunches','—','p38','Slow cooker','Leave out the chipotles and use 1 tsp smoked paprika instead. Adults can stir chipotle into their own bowls.'],
     ['Mon','Protein with greens: Mediterranean chicken (p. 14)','Chicken breast, about 900 g: the pack already in the freezer. Toss with olive oil, lemon, oregano, salt and pepper; roast on one tray with bell peppers, zucchini and red onion at 220°C for 25 minutes. Make enough for Tuesday lunches','Sun night','p14','','Butter pasta: boil 250 g small pasta, drain, stir in butter and a little parmesan. Serve with plain chicken pieces.'],
     ['Tue','Pasta with sausage and broccolini (p. 24)','Pork sausages, about 700 g, from the same shop as Sunday’s. Broccoli works if there is no broccolini. Make extra for Wednesday lunches','—','p24','Pasta','Skip the chilli flakes.'],
     ['Wed','Pork stir fry and green beans with rice (p. 27)','Minced pork, about 650 g, from the freezer. 15 minutes to cook. Cook extra rice for the boys’ Thursday lunch','Tue night','p27','','Leave the chilli garlic sauce out of the pan and add it to adult plates at the table.'],
@@ -201,15 +202,21 @@ var FREEZER = [
 
 var SHOP = [
   { /* WEEK 1 */
+    'Buy today: Sat soup and Sun chili':[
+      ['Diced pancetta (Sat soup)','200 g'],['Cherry tomatoes (soup)','1 punnet'],['Kale (soup)','1 bunch'],['Yellow onions (soup and chili)','2'],['Carrots (soup)','2'],['Celery (soup)','2 sticks'],['Garlic (soup and chili)','1 head'],
+      ['Sweet potatoes (chili)','700 g'],['Black beans (chili)','2 × 400 g cans'],['Diced tomatoes, fire-roasted if possible (chili)','2 × 400 g cans'],
+      ['Orange juice (chili)','1 small carton'],['Lime (chili)','1'],['Frozen corn (chili)','1 bag (about 300 g)'],['Avocado (chili topping)','1'],
+      ['Chipotles in adobo (adults only, optional)','1 small can']
+    ],
     'Produce':[
-      ['Baby potatoes (Sun)','700 g'],['Broccoli (Sun and Fri)','4 heads'],['Broccolini (Tue; or 1 more head of broccoli)','350 g'],
-      ['Bell peppers (Sun and Mon)','4'],['Zucchini (Mon)','2'],['Lemons (Mon chicken)','2'],['Green beans (Wed)','900 g'],['Yellow onion (Wed)','1'],['Red onions (Mon tray and tacos)','2'],
+      ['Broccoli (Fri)','3 heads'],['Broccolini (Tue; or 1 more head of broccoli)','350 g'],
+      ['Bell peppers (Mon)','2'],['Zucchini (Mon)','2'],['Lemons (Mon chicken)','2'],['Green beans (Wed)','900 g'],['Yellow onion (Wed)','1'],['Red onions (Mon tray and tacos)','2'],
       ['Garlic','2 heads'],['Fresh ginger','1 knob'],['Limes (tacos)','3'],['Lemons (Tue pasta)','2'],
       ['Tomatoes (tacos)','3'],['Avocados (tacos)','2'],['Cilantro (tacos)','1 bunch'],['Lettuce (tacos)','1 small head']
     ],
     'Deli and fridge':[
-      ['Pork sausages, Italian style (Sun 650 g, Tue 700 g)','about 1.35 kg'],
-      ['Shredded cheddar (tacos)','200 g'],['Sour cream (tacos)','1 small tub'],['Parmesan (Tue pasta and Mon butter pasta)','200 g']
+      ['Pork sausages, Italian style (Tue)','700 g'],
+      ['Shredded cheddar (chili and tacos)','300 g'],['Sour cream (tacos)','1 small tub'],['Parmesan (Tue pasta and Mon butter pasta)','200 g']
     ],
     'Bread, pasta, tortillas':[
       ['Small pasta for the boys’ butter pasta (Mon)','250 g'],
@@ -294,8 +301,8 @@ SHOP.forEach(function(w, i){ w['Afternoon snacks'] = SNACK_SHOP[i]; });
 var PANTRY = {
   'Oils and vinegars':['Olive oil','Neutral cooking oil','White vinegar (adobo)'],
   'Sauces':['Light soy sauce and dark soy sauce','Sesame oil','Dijon mustard','Ketchup','Honey'],
-  'Spices':['Cumin','Paprika','Dried oregano','Italian seasoning','Garlic powder and onion powder','Cayenne pepper','Chili flakes','Bay leaves','Black peppercorns','Dried dill (if no fresh)','Salt'],
-  'Dry goods':['Jasmine rice','Chicken stock cubes (tacos and chili)','Sesame seeds','Plain flour, sugar and baking powder (banana muffins)'],
+  'Spices':['Cumin','Paprika','Smoked paprika (chili, for the boys)','Dried oregano','Italian seasoning','Garlic powder and onion powder','Cayenne pepper','Chili flakes','Bay leaves','Black peppercorns','Dried dill (if no fresh)','Salt'],
+  'Dry goods':['Jasmine rice','Chicken stock cubes (soup, tacos and chili)','Light brown sugar (Sun chili)','Sesame seeds','Plain flour, sugar and baking powder (banana muffins)'],
   'Breakfast and lunchbox':['Chia seeds','Peanut butter (home only, one jar every two weeks)','Jam (school sandwiches, one jar every two weeks)']
 };
 
@@ -361,14 +368,14 @@ function checklist(prefix, groups, withQty){
 function menuPanel(){
   var p = el('section', {class:'panel', id:'p-menu', role:'tabpanel'});
   p.appendChild(el('div', {class:'note'}, [
-    el('p', {text:'Each week runs Sunday to Saturday. Sundays are a sheet pan dinner: one tray, mostly oven time. Mondays are protein with greens (chicken or salmon roasted with vegetables), with butter pasta for the boys. Saturday is open for leftovers or eating out.'}),
+    el('p', {text:'Each week runs Sunday to Saturday. Week 1 starts tonight, Saturday 28 November, with a soup that uses the beans and tomatoes already at home. Sundays are a slow cooker or sheet pan dinner. Mondays are protein with greens (chicken or salmon roasted with vegetables), with butter pasta for the boys. Saturday is open for leftovers or eating out.'}),
     el('p', {text:'Week 1 Sunday to Wednesday uses meat already in the freezer and from the local shop. The Chung Wan order needs to arrive by Wednesday 2 December, because the taco chicken moves to the fridge that night.'}),
     el('p', {text:'Underlined dishes open the recipe page from the menu book. Recipes serve 4, so make about 1½ times the recipe unless the note says otherwise. That covers dinner plus two adult lunches.'}),
     el('p', {text:'Lunches'}),
     (function(){
       var ul = el('ul');
       ['Parents, weekdays: last night’s dinner for lunch, plus an overnight oats jar and a smoothie for breakfast.',
-       'Week 1 parent lunches: Mon sausage tray • Tue Mediterranean chicken • Wed sausage pasta • Thu pork and green beans • Fri tacos as a rice bowl • Sat chicken adobo',
+       'Week 1 parent lunches: Sun bean and pancetta soup • Mon chili • Tue Mediterranean chicken • Wed sausage pasta • Thu pork and green beans • Fri tacos as a rice bowl • Sat chicken adobo',
        'Week 2 parent lunches: Mon gyros in pita • Tue salmon, broccoli and rice • Wed buffalo wrap (make 2 extra) • Thu white bean chili • Fri eggplant bake • Sat kimchi fried rice',
        'Boys, Monday: mortadella sandwich',
        'Boys, Tuesday: plain pasta with butter and peas',
@@ -417,14 +424,14 @@ function freezerPanel(){
   p.appendChild(table(FREEZER_HAVE));
   p.appendChild(el('h2', {text:'From the local shop instead'}));
   var ul0 = el('ul');
-  ['Pork sausages, about 1.35 kg, for Week 1 Sunday and Tuesday'].forEach(function(t){ ul0.appendChild(el('li', {text:t})); });
+  ['Diced pancetta, about 200 g, for tonight’s soup', 'Pork sausages, about 700 g, for Week 1 Tuesday'].forEach(function(t){ ul0.appendChild(el('li', {text:t})); });
   p.appendChild(ul0);
   p.appendChild(el('h2', {text:'Where the savings come from'}));
   var ul = el('ul');
   [
     'Week 1 starts with the chicken breast and minced pork already at home.',
-    'The eggplant bake has no meat, and kimchi fried rice uses only 300 g of pork.',
-    'Broccoli covers Sunday and Friday in Week 1; sausages cover Sunday and Tuesday. Broccoli also goes with the Week 2 salmon.',
+    'Sunday’s chili and the eggplant bake have no meat, and kimchi fried rice uses only 300 g of pork.',
+    'Tonight’s soup uses the white beans and tomatoes already at home. Broccoli covers Week 1 Friday and Week 2 Monday.',
     'The adobo and eggplant bake are big batches, so they cover lunches without extra cooking.',
     'Leftover tortillas from Tuesday’s wraps become Thursday’s snack quesadillas.',
     'Green beans, broccoli, herbs and spring onions are usually cheaper at a wet market than a supermarket.'
